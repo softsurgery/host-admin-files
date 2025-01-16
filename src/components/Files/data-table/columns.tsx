@@ -9,13 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ArrowUpDown,
-  MoreHorizontal,
-  Trash,
-  Download,
-  Copy,
-} from "lucide-react";
+import { MoreHorizontal, Trash, Download, Copy } from "lucide-react";
 import { DataTableColumnHeader } from "./data-table-column-header";
 
 export type File = {

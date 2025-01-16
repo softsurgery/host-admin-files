@@ -1,5 +1,4 @@
 import React from "react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
 import {
@@ -11,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { FolderUp } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   className?: string;
@@ -18,13 +18,18 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ className }) => {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 sm:px-6">
+    <header
+      className={cn(
+        "sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 sm:px-6",
+        className
+      )}
+    >
       {/* Left Section */}
       <div className="flex items-center gap-2">
         <FolderUp />
         <h1 className="text-xl font-semibold">File Manager</h1>
       </div>
-      
+
       {/* Right Section */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
