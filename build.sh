@@ -13,6 +13,7 @@ fi
 # Set the environment file based on the argument
 ENV_FILE=".env.$1"
 
+
 # Check if the specified environment file exists
 if [ ! -f "$ENV_FILE" ]; then
   echo "Environment file '$ENV_FILE' not found!"
