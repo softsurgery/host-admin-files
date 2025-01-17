@@ -33,7 +33,7 @@ yarn build
 # Define source and destination paths
 PHP_SRC="src/php"
 DIST_DIR="dist/php"
-DIST_FILE="$DIST_DIR/Database.php"
+DIST_FILE="$DIST_DIR/api.php"
 
 # Step 2: Copy PHP files to the dist directory
 if [ -d "$PHP_SRC" ]; then
@@ -49,13 +49,14 @@ if [ -f "$DIST_FILE" ]; then
   echo "Replacing environment variables in copied Database.php..."
   sed -i -e "s/{{DB_HOST}}/${DB_HOST}/g" \
          -e "s/{{DB_NAME}}/${DB_NAME}/g" \
+         -e "s/{{DB_PORT}}/${DB_PORT}/g" \
          -e "s/{{DB_USER}}/${DB_USER}/g" \
          -e "s/{{DB_PASSWORD}}/${DB_PASSWORD}/g" \
          -e "s/{{DB_CHARSET}}/${DB_CHARSET}/g" \
          "$DIST_FILE"
   echo "Environment variables replaced in $DIST_FILE."
 else
-  echo "Database.php not found in $DIST_DIR. Skipping placeholder replacement."
+  echo "api.php not found in $DIST_DIR. Skipping placeholder replacement."
 fi
 
 echo "Build process complete!"
