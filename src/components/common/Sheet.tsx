@@ -40,7 +40,7 @@ export function useSheet({
 
   const isDesktop = useMediaQuery('(min-width: 1500px)');
   const suitableSide = side ? side : isDesktop ? 'right' : 'bottom';
-  const suitableHeight = isDesktop ? 'min-h-screen' : 'h-[500px]';
+  const suitableHeight = isDesktop || side ? 'min-h-screen' : 'h-[500px]';
 
   const SheetFragment = ReactDOM.createPortal(
     <React.Fragment>
