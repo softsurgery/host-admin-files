@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { File, columns } from "./data-table/columns";
 import { DataTable } from "./data-table/data-table";
+import { useBreadcrumb } from "@/context/BreadcrumbContext";
 
 async function getData(): Promise<File[]> {
   // Fetch data from your API here.
@@ -152,6 +153,15 @@ export default function Files() {
   const [data, setData] = useState<File[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const { setRoutes } = useBreadcrumb();
+
+  React.useEffect(() => {
+    setRoutes?.([
+      { href: "/", title: "Home" },
+      { href: "/files", title: "Files" },
+    ]);
+  }, []);
+
   useEffect(() => {
     getData()
       .then((fetchedData) => {
@@ -168,9 +178,5 @@ export default function Files() {
     return <div>No data available</div>;
   }
 
-  return (
-    <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
-  );
+  return <DataTable columns={columns} data={data} />;
 }
