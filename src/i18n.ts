@@ -9,12 +9,11 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
-    debug: true,
     interpolation: {
-      escapeValue: false, // React already escapes
+      escapeValue: false,
     },
     backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
+      loadPath: './locales/{{lng}}/{{ns}}.json',
     },
   });
 
