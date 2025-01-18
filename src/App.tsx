@@ -1,10 +1,22 @@
+import React from "react";
 import Files from "./components/Files/Files";
-import { Header } from "./components/layout/Header";
+import Layout from "./components/layout/Layout";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "sonner";
+
 export default function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [{ path: "/", element: <Files /> }],
+    },
+  ]);
+
   return (
-    <>
-      <Header/>
-      <Files/>
-    </>
+    <React.Fragment>
+      <RouterProvider router={router} />
+      <Toaster />
+    </React.Fragment>
   );
 }

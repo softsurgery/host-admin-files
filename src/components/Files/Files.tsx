@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { File, columns } from "./data-table/columns";
 import { DataTable } from "./data-table/data-table";
+import { useBreadcrumb } from "@/context/BreadcrumbContext";
+import { FileUploader } from "../ui/file-uploader";
 
 async function getData(): Promise<File[]> {
   // Fetch data from your API here.
@@ -152,6 +154,15 @@ export default function Files() {
   const [data, setData] = useState<File[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const { setRoutes } = useBreadcrumb();
+
+  React.useEffect(() => {
+    setRoutes?.([
+      { href: "/", title: "Home" },
+      { href: "/files", title: "Files" },
+    ]);
+  }, []);
+
   useEffect(() => {
     getData()
       .then((fetchedData) => {
@@ -169,7 +180,10 @@ export default function Files() {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="flex flex-col flex-1 overflow-auto p-5 no-scrollbar">
+      <div>
+        <FileUploader className="my-5" maxFileCount={Infinity} />
+      </div>
       <DataTable columns={columns} data={data} />
     </div>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { User } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,14 +9,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FolderUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useMenuContext } from "@/context/MenuContext";
+import { BreadcrumbRoute } from "@/context/BreadcrumbContext";
+import { BreadcrumbCommon } from "../common/Breadcrumb";
 
 interface HeaderProps {
   className?: string;
+  routes?: BreadcrumbRoute[];
 }
 
-export const Header: React.FC<HeaderProps> = ({ className }) => {
+export const Header: React.FC<HeaderProps> = ({ className, routes }) => {
+  const { openMenu } = useMenuContext();
   return (
     <header
       className={cn(
@@ -25,9 +29,11 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
       )}
     >
       {/* Left Section */}
-      <div className="flex items-center gap-2">
-        <FolderUp />
-        <h1 className="text-xl font-semibold">File Manager</h1>
+      <div className="flex items-center gap-4">
+        <Button variant={"ghost"} size="icon" onClick={openMenu}>
+          <Menu />
+        </Button>
+        <BreadcrumbCommon hierarchy={routes} />
       </div>
 
       {/* Right Section */}
