@@ -1,6 +1,8 @@
+import React from "react";
 import Files from "./components/Files/Files";
 import Layout from "./components/layout/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "sonner";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -11,5 +13,10 @@ export default function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <React.Fragment>
+      <RouterProvider router={router} />
+      <Toaster />
+    </React.Fragment>
+  );
 }
