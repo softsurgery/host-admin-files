@@ -6,6 +6,7 @@ import { useMenuContext } from "@/context/MenuContext";
 import { BreadcrumbRoute } from "@/context/BreadcrumbContext";
 import { BreadcrumbCommon } from "../common/Breadcrumb";
 import { AccountDropdown } from "./AccountDropdown";
+import { ModeToggle } from "../common/ModeToggle";
 
 interface HeaderProps {
   className?: string;
@@ -30,7 +31,10 @@ export const Header: React.FC<HeaderProps> = ({ className, routes }) => {
       </div>
 
       {/* Right Section */}
-      <AccountDropdown />
+      <div className="flex justify-center gap-4">
+        <ModeToggle />
+        <AccountDropdown />
+      </div>
     </header>
   );
 };

@@ -3,6 +3,7 @@ import Files from "./components/Files/Files";
 import Layout from "./components/layout/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "./components/theme-provider";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -15,8 +16,10 @@ export default function App() {
 
   return (
     <React.Fragment>
-      <RouterProvider router={router} />
-      <Toaster />
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+        <Toaster />
+      </ThemeProvider>
     </React.Fragment>
   );
 }
