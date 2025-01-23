@@ -1,10 +1,7 @@
 import {
-  Book,
-  Bot,
-  Code2,
   LifeBuoy,
-  Settings2,
-  SquareTerminal,
+  LucideProps,
+  Paperclip,
   SquareUser,
   Triangle,
 } from "lucide-react";
@@ -16,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "./Header";
 import {
   BreadcrumbContext,
@@ -25,21 +22,67 @@ import {
 import React from "react";
 import { cn } from "@/lib/utils";
 
-export const description =
-  "An AI playground with a sidebar navigation and a main content area. The playground has a header with a settings drawer and a share button. The sidebar has navigation links and a user menu. The main content area shows a form to configure the model and messages.";
-
 interface LayoutProps {
   className?: string;
 }
 
+interface MenuItem {
+  id: number;
+  label: string;
+  href: string;
+  icon: React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+  >;
+}
+
 export default function Layout({ className }: LayoutProps) {
+  //navigate
+  const navigate = useNavigate();
+
   //for breadcrumb provider
   const [routes, setRoutes] = React.useState<BreadcrumbRoute[]>([]);
   const breadcrumbContext = {
     routes,
     setRoutes,
   };
+
   const version = "0.0.1-beta";
+
+  const aItems: MenuItem[] = [
+    { id: 1, label: "D.M.S", href: "/", icon: Paperclip },
+  ];
+  const bItems: MenuItem[] = [
+    { id: 1, label: "Help", href: "/help", icon: LifeBuoy },
+    { id: 2, label: "Account", href: "/account", icon: SquareUser },
+  ];
+
+  const itemMapper = (items: MenuItem[]) => {
+    return items.map((item) => (
+      <Tooltip key={item.id}>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "rounded-lg",
+              item.href == window.location.pathname ? "bg-muted" : ""
+            )}
+            aria-label={item.label}
+            onClick={() => navigate(item.href)}
+          >
+            <item.icon className="size-5" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent
+          side="right"
+          sideOffset={5}
+          className="font-bold text-xs"
+        >
+          {item.label}
+        </TooltipContent>
+      </Tooltip>
+    ));
+  };
 
   return (
     <BreadcrumbContext.Provider value={breadcrumbContext}>
@@ -57,117 +100,10 @@ export default function Layout({ className }: LayoutProps) {
               </Button>
             </div>
             <nav className="grid gap-1 p-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-lg bg-muted"
-                      aria-label="Playground"
-                    >
-                      <SquareTerminal className="size-5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={5}>
-                    Playground
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-lg"
-                      aria-label="Models"
-                    >
-                      <Bot className="size-5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={5}>
-                    Models
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-lg"
-                      aria-label="API"
-                    >
-                      <Code2 className="size-5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={5}>
-                    API
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-lg"
-                      aria-label="Documentation"
-                    >
-                      <Book className="size-5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={5}>
-                    Documentation
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-lg"
-                      aria-label="Settings"
-                    >
-                      <Settings2 className="size-5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={5}>
-                    Settings
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <TooltipProvider>{itemMapper(aItems)}</TooltipProvider>
             </nav>
             <nav className="mt-auto grid gap-1 p-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="mt-auto rounded-lg"
-                      aria-label="Help"
-                    >
-                      <LifeBuoy className="size-5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={5}>
-                    Help
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="mt-auto rounded-lg"
-                      aria-label="Account"
-                    >
-                      <SquareUser className="size-5" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" sideOffset={5}>
-                    Account
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <TooltipProvider>{itemMapper(bItems)}</TooltipProvider>
             </nav>
           </aside>
           <div className="flex flex-col flex-1 min-h-screen max-h-screen">
@@ -175,7 +111,7 @@ export default function Layout({ className }: LayoutProps) {
             <main className="grid flex-1 gap-4 overflow-auto">
               <Outlet />
             </main>
-              <p className="text-xs border ml-auto p-0.5 w-fit">{version}</p>
+            <p className="text-xs border ml-auto p-0.5 w-fit">{version}</p>
           </div>
         </div>
       </div>
