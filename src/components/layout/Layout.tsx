@@ -39,6 +39,8 @@ export default function Layout({ className }: LayoutProps) {
     routes,
     setRoutes,
   };
+  const version = "0.0.1-beta";
+
   return (
     <BreadcrumbContext.Provider value={breadcrumbContext}>
       <div
@@ -168,11 +170,12 @@ export default function Layout({ className }: LayoutProps) {
               </TooltipProvider>
             </nav>
           </aside>
-          <div className="flex flex-col">
-            <Header routes={routes}/>
-            <main className="grid flex-1 gap-4 overflow-auto p-4">
+          <div className="flex flex-col flex-1 min-h-screen max-h-screen">
+            <Header routes={routes} />
+            <main className="grid flex-1 gap-4 overflow-auto">
               <Outlet />
             </main>
+              <p className="text-xs border ml-auto p-0.5 w-fit">{version}</p>
           </div>
         </div>
       </div>

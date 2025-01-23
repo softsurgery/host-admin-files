@@ -1,7 +1,7 @@
 {
-  "name": "host-admin-files",
+  "name": "kruger-back-office",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1-beta",
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=test vite",
