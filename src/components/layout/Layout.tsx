@@ -1,4 +1,6 @@
 import {
+  File,
+  FlaskConical,
   LifeBuoy,
   LucideProps,
   Paperclip,
@@ -13,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Header } from "./Header";
 import {
   BreadcrumbContext,
@@ -38,6 +40,7 @@ interface MenuItem {
 export default function Layout({ className }: LayoutProps) {
   //navigate
   const navigate = useNavigate();
+  const location = useLocation();
 
   //for breadcrumb provider
   const [routes, setRoutes] = React.useState<BreadcrumbRoute[]>([]);
@@ -49,7 +52,9 @@ export default function Layout({ className }: LayoutProps) {
   const version = "0.0.1-beta";
 
   const aItems: MenuItem[] = [
-    { id: 1, label: "D.M.S", href: "/", icon: Paperclip },
+    { id: 1, label: "D.M.S", href: "/dms", icon: Paperclip },
+    { id: 2, label: "Files", href: "/files", icon: File },
+    { id: 3, label: "Test", href: "/test", icon: FlaskConical },
   ];
   const bItems: MenuItem[] = [
     { id: 1, label: "Help", href: "/help", icon: LifeBuoy },
@@ -65,7 +70,7 @@ export default function Layout({ className }: LayoutProps) {
             size="icon"
             className={cn(
               "rounded-lg",
-              item.href == window.location.pathname ? "bg-muted" : ""
+              item.href == location.pathname ? "bg-muted" : ""
             )}
             aria-label={item.label}
             onClick={() => navigate(item.href)}
@@ -92,7 +97,7 @@ export default function Layout({ className }: LayoutProps) {
           className
         )}
       >
-        <div className="grid h-screen w-full pl-[56px]">
+        <div className="flex flex-col flex-1 overflow-hidden min-h-screen max-h-screen pl-[56px]">
           <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
             <div className="border-b p-2">
               <Button variant="outline" size="icon" aria-label="Home">
@@ -106,9 +111,11 @@ export default function Layout({ className }: LayoutProps) {
               <TooltipProvider>{itemMapper(bItems)}</TooltipProvider>
             </nav>
           </aside>
-          <div className="flex flex-col flex-1 min-h-screen max-h-screen">
-            <Header routes={routes} />
-            <main className="grid flex-1 gap-4 overflow-auto">
+          <div className="flex flex-col flex-1 overflow-hidden">
+            <div>
+              <Header routes={routes} />
+            </div>
+            <main className="flex flex-col flex-1 overflow-hidden gap-4">
               <Outlet />
             </main>
             <p className="text-xs border ml-auto p-0.5 w-fit">{version}</p>
