@@ -12,7 +12,9 @@ export default function App() {
       element: <Layout />,
       children: [{ path: "/", element: <Files /> }],
     },
-  ]);
+  ],{
+    basename: import.meta.env.VITE_HTACCESS_ORIGIN
+  });
 
   return (
     <React.Fragment>

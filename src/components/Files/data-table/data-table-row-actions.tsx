@@ -17,9 +17,9 @@ interface DataTableRowActionsProps {
   row: Row<BFile>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
-  // const file = row.original;
+  const file = row.original;
+  console.log(file)
   // const { openUpdateFileSheet, openDeleteFileDialog, openDuplicateFileDialog } =
   //   useFileActions();
 

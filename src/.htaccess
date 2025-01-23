@@ -1,18 +1,13 @@
 # Enable URL rewriting
-RewriteEngine Off
+RewriteEngine On
 
-# Set the base directory for the rewrite
-RewriteBase /{{HTACCESS_ORIGIN}}
+RewriteBase {{HTACCESS_ORIGIN}}
 
-# Allow direct access to files and directories
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Allow direct access to PHP files
-RewriteCond %{REQUEST_URI} \.php$
+RewriteCond %{REQUEST_URI} \.php$ [NC]
 RewriteRule ^ - [L]
 
-# Redirect all other requests to index.html
-RewriteRule ^(.*)$ /index.html [NC,L,QSA]
-FallbackResource /index.html
+RewriteRule ^(.*)$ {{HTACCESS_ORIGIN}}/index.html [L]

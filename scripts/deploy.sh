@@ -44,14 +44,17 @@ fi
 echo "Uploading $DIRECTORY to $FTP_SERVER:$REMOTE_DIR..."
 
 lftp -e "
+set ftp:passive-mode true;
+set ftp:port 21;
 set ssl:verify-certificate no;
-open -u $FTP_USERNAME,$FTP_PASSWORD ftp://$FTP_SERVER:$FTP_PORT;
+open -u $FTP_USERNAME,$FTP_PASSWORD ftp://$FTP_SERVER;
 mirror -R $DIRECTORY $REMOTE_DIR;
 bye
 " || {
     echo "Error: Failed to upload $DIRECTORY to $FTP_SERVER."
     exit 1
 }
+
 
 echo "Upload completed successfully."
 exit 0

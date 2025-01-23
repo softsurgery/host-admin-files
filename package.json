@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "NODE_ENV=test vite",
     "build": "tsc -b && vite build",
-    "php-build": "./build.sh",
-    "deploy": "./deploy.sh dist",
+    "php-build": "./scripts/build.sh",
+    "deploy": "./scripts/deploy.sh dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
