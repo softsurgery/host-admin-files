@@ -9,6 +9,8 @@ import {
 import { Button } from "../ui/button";
 import { User } from "lucide-react";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
+import { Suspense } from "react";
+import { Spinner } from "../common/Spinner";
 
 export const AccountDropdown = () => {
   return (
@@ -27,7 +29,9 @@ export const AccountDropdown = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>
-          <LanguageSwitcher />
+          <Suspense fallback={<Spinner />}>
+              <LanguageSwitcher />
+          </Suspense>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Logout</DropdownMenuItem>

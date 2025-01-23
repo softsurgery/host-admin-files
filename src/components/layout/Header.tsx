@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { BreadcrumbRoute } from "@/context/BreadcrumbContext";
 import { ModeToggle } from "../common/ModeToggle";
 import { BreadcrumbCommon } from "../common/Breadcrumb";
+import { AccountDropdown } from "./AccountDropdown";
 
 interface HeaderProps {
   className?: string;
@@ -21,7 +22,10 @@ export const Header: React.FC<HeaderProps> = ({ className, routes }) => {
       {/* Right Section */}
       <div className="flex items-center justify-between w-full">
         <BreadcrumbCommon routes={routes} />
-        <ModeToggle />
+        <div>
+          <ModeToggle />
+          <AccountDropdown />
+        </div>
       </div>
     </header>
   );
