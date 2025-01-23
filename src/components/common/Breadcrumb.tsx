@@ -6,25 +6,25 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
 import { cn } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
+import { SquareSlash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface BreadcrumbCommonProps {
   className?: string;
-  hierarchy?: { title: string; href?: string }[];
+  routes?: { title: string; href?: string }[];
 }
 
 export const BreadcrumbCommon = ({
   className,
-  hierarchy,
+  routes,
 }: BreadcrumbCommonProps) => {
   const navigate = useNavigate();
-  const lastIndex = hierarchy ? hierarchy.length - 1 : 0;
+  const lastIndex = routes ? routes.length - 1 : 0;
 
   return (
     <Breadcrumb className={cn(className, "my-auto")} aria-label="breadcrumb">
       <BreadcrumbList className="flex flex-wrap gap-1 sm:gap-2 items-center">
-        {hierarchy?.map((item, index) => (
+        {routes?.map((item, index) => (
           <BreadcrumbItem
             key={index}
             className="flex items-center gap-1 sm:gap-2"
@@ -32,7 +32,7 @@ export const BreadcrumbCommon = ({
             {item.href ? (
               <BreadcrumbLink
                 className={cn(
-                  "font-semibold text-sm",
+                  "font-medium text-xs",
                   item.href ? "cursor-pointer" : "cursor-default"
                 )}
                 onClick={() => {
@@ -47,9 +47,7 @@ export const BreadcrumbCommon = ({
               </BreadcrumbPage>
             )}
             {index != lastIndex && (
-              <ChevronRight
-                className={cn("w-4 h-4", "text-gray-400")}
-              />
+              <SquareSlash className={cn("w-5 h-5", "text-gray-400")} />
             )}
           </BreadcrumbItem>
         ))}

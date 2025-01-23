@@ -1,12 +1,8 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useMenuContext } from "@/context/MenuContext";
 import { BreadcrumbRoute } from "@/context/BreadcrumbContext";
-import { BreadcrumbCommon } from "../common/Breadcrumb";
-import { AccountDropdown } from "./AccountDropdown";
 import { ModeToggle } from "../common/ModeToggle";
+import { BreadcrumbCommon } from "../common/Breadcrumb";
 
 interface HeaderProps {
   className?: string;
@@ -14,26 +10,18 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ className, routes }) => {
-  const { openMenu } = useMenuContext();
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 flex h-20 items-center justify-between border-b bg-background px-4 sm:px-6",
+        (className =
+          "sticky top-0 z-10 flex h-[57px] items-center gap-1 border-b bg-background px-4 w-full"),
         className
       )}
     >
-      {/* Left Section */}
-      <div className="flex items-center gap-4">
-        <Button variant={"ghost"} size="icon" onClick={openMenu}>
-          <Menu />
-        </Button>
-        <BreadcrumbCommon hierarchy={routes} />
-      </div>
-
       {/* Right Section */}
-      <div className="flex justify-center gap-4">
+      <div className="flex items-center justify-between w-full">
+        <BreadcrumbCommon routes={routes} />
         <ModeToggle />
-        <AccountDropdown />
       </div>
     </header>
   );
