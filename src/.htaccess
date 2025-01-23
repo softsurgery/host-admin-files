@@ -7,7 +7,8 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-RewriteCond %{REQUEST_URI} \.php$ [NC]
-RewriteRule ^ - [L]
+# Redirect all other requests to index.html
+RewriteRule ^ index.html [L]
 
-RewriteRule ^(.*)$ {{HTACCESS_ORIGIN}}/index.html [L]
+AddType text/css .css
+AddType application/javascript .js
