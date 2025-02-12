@@ -11393,7 +11393,8 @@ namespace Tqdev\PhpCrudApi\Record\Document {
         public function jsonSerialize()
         {
             return array_filter($this->serialize(), function ($v) {
-                return $v !== null; });
+                return $v !== null;
+            });
         }
 
         public static function fromException(\Throwable $exception, bool $debug)
@@ -12856,11 +12857,20 @@ namespace Tqdev\PhpCrudApi {
 
 // file: src/index.php
 namespace Tqdev\PhpCrudApi {
+    include './services/auth.service.php';
 
     use Tqdev\PhpCrudApi\Api;
     use Tqdev\PhpCrudApi\Config\Config;
     use Tqdev\PhpCrudApi\RequestFactory;
     use Tqdev\PhpCrudApi\ResponseUtils;
+    use AuthService;
+
+
+    $authService = new AuthService();
+    if (!$authService->is_logged_in()) {
+        echo "not authenticated";
+        return;
+    }
 
     $config = new Config([
         'driver' => 'mysql',
