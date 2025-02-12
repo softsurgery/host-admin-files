@@ -12868,7 +12868,10 @@ namespace Tqdev\PhpCrudApi {
 
     $authService = new AuthService();
     if (!$authService->is_logged_in()) {
-        echo "not authenticated";
+        echo json_encode([
+            'status' => '301',
+            'message' => 'Not Authenticated'
+        ]);
         return;
     }
 

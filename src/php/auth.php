@@ -11,12 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
     if ($authService->login($username, $password)) {
         echo json_encode([
-            'status' => 'success',
+            'status' => '200',
             'message' => 'Login successful'
         ]);
     } else {
         echo json_encode([
-            'status' => 'error',
+            'status' => '500',
             'message' => 'Invalid username or password'
         ]);
     }
@@ -27,7 +27,7 @@ if (isset($_GET['logout'])) {
     $authService->logout();
 
     echo json_encode([
-        'status' => 'success',
+        'status' => '200',
         'message' => 'Logged out successfully'
     ]);
     exit();
