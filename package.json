@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "NODE_ENV=test vite",
     "build": "tsc -b && vite build",
-    "php:build": "./scripts/build.sh",
+    "php:build": "python3 ./scripts/build.py",
     "deploy": "./scripts/deploy.sh dist",
     "lint": "eslint .",
     "preview": "vite preview"
