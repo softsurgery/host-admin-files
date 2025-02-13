@@ -12857,17 +12857,14 @@ namespace Tqdev\PhpCrudApi {
 
 // file: src/index.php
 namespace Tqdev\PhpCrudApi {
-    include './services/auth.service.php';
 
     use Tqdev\PhpCrudApi\Api;
     use Tqdev\PhpCrudApi\Config\Config;
     use Tqdev\PhpCrudApi\RequestFactory;
     use Tqdev\PhpCrudApi\ResponseUtils;
-    use AuthService;
 
 
-    $authService = new AuthService();
-    if (!$authService->is_logged_in()) {
+    if (!$_SESSION['user']) {
         echo json_encode([
             'status' => '301',
             'message' => 'Not Authenticated'
