@@ -12,7 +12,10 @@ import DMSMain from "./components/DMS/DMSMain";
 import Page404 from "./components/common/Page404";
 import ComingSoon from "./components/common/ComingSoon";
 import { Workspaces } from "./components/DMS/Workspaces";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Auth } from "./components/auth/Auth";
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const router = createBrowserRouter(
@@ -44,11 +47,13 @@ export default function App() {
 
   return (
     <React.Fragment>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        {/* <RouterProvider router={router} /> */}
-        <Auth />
-        <Toaster />
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          {/* <RouterProvider router={router} /> */}
+          <Auth />
+          <Toaster />
+        </ThemeProvider>
+      </QueryClientProvider>
     </React.Fragment>
   );
 }

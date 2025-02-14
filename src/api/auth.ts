@@ -1,23 +1,23 @@
 import { AuthResponse, LoginRequest, RegisterRequest } from "@/types/Auth";
 import axios from "./axios";
 
+// Register User
 export const registerUser = async ({
   username,
   email,
   password,
 }: RegisterRequest): Promise<AuthResponse> => {
-  const response = await axios.post<AuthResponse>(
-    "/auth.php",
-    {
-      register: true,
-      username,
-      email,
-      password,
+  const data = new URLSearchParams();
+  data.append("register", "true");
+  data.append("username", username);
+  data.append("email", email);
+  data.append("password", password);
+
+  const response = await axios.post<AuthResponse>("/auth.php", data, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    {
-      headers: { "Content-Type": "application/json" },
-    }
-  );
+  });
   return response.data;
 };
 
@@ -26,23 +26,22 @@ export const loginUser = async ({
   username,
   password,
 }: LoginRequest): Promise<AuthResponse> => {
-  const response = await axios.post<AuthResponse>(
-    "/auth.php",
-    {
-      login: true,
-      username,
-      password,
-    },
-    {
-      headers: { "Content-Type": "application/json" },
-    }
-  );
+  const data = new URLSearchParams();
+  data.append("login", "true");
+  data.append("username", username);
+  data.append("password", password);
 
+  const response = await axios.post<AuthResponse>("/auth.php", data, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
   return response.data;
 };
 
+// Logout User
 export const logoutUser = async (): Promise<AuthResponse> => {
-  const response = await axios.get<AuthResponse>(`/auth.php?logout=true`);
+  const response = await axios.get<AuthResponse>("/auth.php?logout=true");
   return response.data;
 };
 
