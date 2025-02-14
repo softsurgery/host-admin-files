@@ -38,6 +38,7 @@ export default function App() {
           { path: "/test", element: <div>Test</div> },
         ],
       },
+      { path: "/auth", element: <Auth /> },
       { path: "*", element: <Page404 /> },
     ],
     {
@@ -49,8 +50,7 @@ export default function App() {
     <React.Fragment>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          {/* <RouterProvider router={router} /> */}
-          <Auth />
+          <RouterProvider router={router} />
           <Toaster />
         </ThemeProvider>
       </QueryClientProvider>

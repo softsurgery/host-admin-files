@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, GalleryVerticalEnd, Goal } from "lucide-react";
+import { GalleryVerticalEnd, Goal } from "lucide-react";
 import { useAuthStore } from "@/hooks/stores/useAuthStore";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/api";
@@ -17,24 +17,28 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { authSchema } from "@/types/validations/Auth";
 import { ServerResponse } from "@/types/utils/ServerResponse";
+import { useNavigate } from "react-router-dom";
 
 export function Auth({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const navigate = useNavigate();
   const authStore = useAuthStore();
 
   const { mutate: authenticateUser, isPending: isAuthenticateUserPending } =
     useMutation({
       mutationFn: async () => {
         return api.auth.loginUser({
-          username: authStore.email,
+          usernameOrEmail: authStore.email,
           password: authStore.password,
         });
       },
-      onSuccess: () => {},
+      onSuccess: () => {
+        navigate("/");
+        toast.success("Welcome Back, We Are Delighted To Have You Back");
+      },
       onError: (error: AxiosError<ServerResponse>) => {
-        console.log(error);
         toast.error(error?.response?.data?.message);
       },
     });
@@ -42,9 +46,12 @@ export function Auth({
   const handleAuthSubmit = () => {
     const data = authStore.get();
     const result = authSchema.safeParse(data);
-    if (!result.success)
+    if (!result.success) {
       authStore.set("errors", result.error.flatten().fieldErrors);
-    else authenticateUser();
+    } else {
+      authStore.set("errors", {});
+      authenticateUser();
+    }
   };
 
   return (

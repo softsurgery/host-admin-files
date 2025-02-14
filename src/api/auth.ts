@@ -23,12 +23,12 @@ export const registerUser = async ({
 
 // Login User
 export const loginUser = async ({
-  username,
+  usernameOrEmail,
   password,
 }: LoginRequest): Promise<AuthResponse> => {
   const data = new URLSearchParams();
   data.append("login", "true");
-  data.append("username", username);
+  data.append("usernameOrEmail", usernameOrEmail);
   data.append("password", password);
 
   const response = await axios.post<AuthResponse>("/auth.php", data, {
