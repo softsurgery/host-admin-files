@@ -9,10 +9,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, GalleryVerticalEnd } from "lucide-react";
+import { ArrowRight, GalleryVerticalEnd, Goal } from "lucide-react";
 import { useAuthStore } from "@/hooks/stores/useAuthStore";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/api";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
+import { authSchema } from "@/types/validations/Auth";
+import { ServerResponse } from "@/types/utils/ServerResponse";
 
 export function Auth({
   className,
@@ -28,18 +32,19 @@ export function Auth({
           password: authStore.password,
         });
       },
-      onSuccess: (data) => {
-        console.log("Login successful:", data);
-        // Handle success, e.g., redirect or store token
-      },
-      onError: (error) => {
-        console.error("Login failed:", error);
-        // Handle error, e.g., show notification
+      onSuccess: () => {},
+      onError: (error: AxiosError<ServerResponse>) => {
+        console.log(error);
+        toast.error(error?.response?.data?.message);
       },
     });
 
   const handleAuthSubmit = () => {
-    authenticateUser();
+    const data = authStore.get();
+    const result = authSchema.safeParse(data);
+    if (!result.success)
+      authStore.set("errors", result.error.flatten().fieldErrors);
+    else authenticateUser();
   };
 
   return (
@@ -65,33 +70,54 @@ export function Auth({
                   <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
-                      disabled={isAuthenticateUserPending}
                       type="text"
+                      autoComplete="email"
+                      disabled={isAuthenticateUserPending}
                       placeholder="m@example.com"
                       value={authStore.email}
                       onChange={(e) => authStore.set("email", e.target.value)}
                     />
+                    {authStore?.errors?.email?.[0] && (
+                      <span className="text-red-700 text-xs font-semibold">
+                        {authStore?.errors?.email?.[0]}
+                      </span>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
                     <Input
-                      disabled={isAuthenticateUserPending}
                       type="password"
                       placeholder="••••••••"
-                      autoComplete="off"
+                      autoComplete="new-password"
+                      disabled={isAuthenticateUserPending}
                       value={authStore.password}
                       onChange={(e) =>
                         authStore.set("password", e.target.value)
                       }
                     />
+                    {authStore?.errors?.password?.[0] && (
+                      <span className="text-red-700 text-xs font-semibold">
+                        {authStore?.errors?.password?.[0] || ""}
+                      </span>
+                    )}
                   </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    onClick={handleAuthSubmit}
-                  >
-                    Continue <ArrowRight className="h-6 w-6" />
-                  </Button>
+                  <div className="flex gap-4">
+                    <Button
+                      type="submit"
+                      className="w-full flex items-center gap-1"
+                      onClick={handleAuthSubmit}
+                    >
+                      <Goal /> <span>Continue</span>
+                    </Button>
+                    <Button
+                      type="reset"
+                      variant={"outline"}
+                      className="w-full flex items-center gap-1"
+                      onClick={() => authStore.reset()}
+                    >
+                      <span>Reset</span>
+                    </Button>
+                  </div>
                 </div>
               </form>
             </CardContent>
