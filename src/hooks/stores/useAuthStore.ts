@@ -5,7 +5,7 @@ interface AuthData {
   password: string;
 }
 
-interface AuthManager extends AuthData {
+interface AuthStore extends AuthData {
   set: (attribute: keyof AuthData, value: unknown) => void;
   reset: () => void;
 }
@@ -15,7 +15,7 @@ const AuthDataDefaults: AuthData = {
   password: "",
 };
 
-export const useAuthForm = create<AuthManager>((set) => ({
+export const useAuthStore = create<AuthStore>((set) => ({
   ...AuthDataDefaults,
   set: (attribute: keyof AuthData, value: unknown) => {
     set((state) => ({
