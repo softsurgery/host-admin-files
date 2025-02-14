@@ -12863,6 +12863,7 @@ namespace Tqdev\PhpCrudApi {
     use Tqdev\PhpCrudApi\RequestFactory;
     use Tqdev\PhpCrudApi\ResponseUtils;
 
+    session_start();
 
     if (!$_SESSION['user']) {
         echo json_encode([
