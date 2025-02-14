@@ -12,6 +12,7 @@ import DMSMain from "./components/DMS/DMSMain";
 import Page404 from "./components/common/Page404";
 import ComingSoon from "./components/common/ComingSoon";
 import { Workspaces } from "./components/DMS/Workspaces";
+import { Auth } from "./components/auth/Auth";
 
 export default function App() {
   const router = createBrowserRouter(
@@ -44,7 +45,8 @@ export default function App() {
   return (
     <React.Fragment>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <RouterProvider router={router} />
+        {/* <RouterProvider router={router} /> */}
+        <Auth />
         <Toaster />
       </ThemeProvider>
     </React.Fragment>
