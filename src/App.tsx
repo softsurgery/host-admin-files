@@ -13,7 +13,7 @@ import Page404 from "./components/common/Page404";
 import ComingSoon from "./components/common/ComingSoon";
 import { Workspaces } from "./components/DMS/Workspaces";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Auth } from "./components/auth/Auth";
+import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
