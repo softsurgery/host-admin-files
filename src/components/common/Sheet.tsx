@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '../ui/sheet';
-import { cn } from '@/lib/utils';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "../ui/sheet";
+import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-export type SheetSide = 'top' | 'right' | 'bottom' | 'left';
+export type SheetSide = "top" | "right" | "bottom" | "left";
 
 interface UseSheetOptions {
   children: React.ReactNode;
@@ -23,11 +29,11 @@ interface UseSheetReturn {
 
 export function useSheet({
   children,
-  className = '',
+  className = "",
   title,
   description,
   side,
-  onToggle
+  onToggle,
 }: UseSheetOptions): UseSheetReturn {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -38,16 +44,20 @@ export function useSheet({
     onToggle?.();
   };
 
-  const isDesktop = useMediaQuery('(min-width: 1500px)');
-  const suitableSide = side ? side : isDesktop ? 'right' : 'bottom';
-  const suitableHeight = isDesktop || side ? 'min-h-screen' : 'h-[500px]';
+  const isDesktop = useMediaQuery("(min-width: 1500px)");
+  const suitableSide = side ? side : isDesktop ? "right" : "bottom";
+  const suitableHeight = isDesktop || side ? "min-h-screen" : "h-[500px]";
 
   const SheetFragment = ReactDOM.createPortal(
     <React.Fragment>
       <Sheet open={isOpen} onOpenChange={onOpenChange}>
         <SheetContent
           side={suitableSide}
-          className={cn(suitableHeight, 'overflow-auto', className)}>
+          className={cn(suitableHeight, "overflow-auto", className)}
+          onPointerDownOutside={(e) => {
+            e.preventDefault();
+          }}
+        >
           <SheetHeader>
             <SheetTitle>{title}</SheetTitle>
             <SheetDescription>{description}</SheetDescription>
