@@ -12863,14 +12863,26 @@ namespace Tqdev\PhpCrudApi {
     use Tqdev\PhpCrudApi\RequestFactory;
     use Tqdev\PhpCrudApi\ResponseUtils;
 
+    header("Access-Control-Allow-Origin: {{VITE_APP_URL}}");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+    // Handle Preflight
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
+        exit();
+    }
+
     session_start();
 
-    if (!$_SESSION['user']) {
+    if (!isset($_SESSION['user']) || $_SESSION['user']) {
+        http_response_code(301);
         echo json_encode([
             'status' => '301',
             'message' => 'Not Authenticated'
         ]);
-        return;
+        exit();
     }
 
     $config = new Config([
