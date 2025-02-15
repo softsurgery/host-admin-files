@@ -30,7 +30,7 @@ def replace_placeholders(src_file, dest_file):
     # Replace placeholders with actual environment values
     placeholders = [
         "DB_HOST", "DB_NAME", "DB_PORT", "DB_USER", "DB_PASSWORD", "DB_CHARSET",
-        "HTACCESS_ORIGIN"
+        "HTACCESS_ORIGIN", "VITE_APP_URL"
     ]
     for key in placeholders:
         content = content.replace(f"{{{{{key}}}}}", os.getenv(key, f"{{{key}}}"))  # Default to keeping placeholder
