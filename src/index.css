@@ -107,14 +107,53 @@
   }
 }
 
+
 @layer base {
-  * {
-    @apply border-border;
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
   }
-  body {
-    @apply bg-background text-foreground;
-    overflow: hidden;
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-400 rounded-lg;
   }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-500;
+  }
+}
+
+html,
+body {
+  font-family: "Verdana", system-ui, sans-serif;
+  overflow: hidden;
+  padding: 0;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+input[type="date"]::-moz-calendar-picker-indicator {
+  display: none;
+}
+
+input[type="date"]::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 /* Chrome, Safari and Opera */
@@ -125,4 +164,13 @@
 .no-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

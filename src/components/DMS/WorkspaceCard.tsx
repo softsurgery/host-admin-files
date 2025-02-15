@@ -1,11 +1,25 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { cn } from "@/lib/utils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Workspace } from "@/types/Workspace";
 
-export const WorkspaceCard = () => {
+interface WorkspaceCardProps {
+  className?: string;
+  workspace?: Workspace;
+}
+
+export const WorkspaceCard = ({ className, workspace }: WorkspaceCardProps) => {
   return (
-    <Card>
+    <Card className={cn("w-full", className)}>
       <CardHeader>
-        <CardTitle>Workspace</CardTitle>
-        <CardDescription>Warkspace Description</CardDescription>
+        <CardTitle>{workspace?.name}</CardTitle>
+        <CardDescription>{workspace?.description}</CardDescription>
       </CardHeader>
       <CardContent>
         <p>Workspace</p>
