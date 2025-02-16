@@ -14,6 +14,8 @@ import ComingSoon from "./components/common/ComingSoon";
 import { Workspaces } from "./components/DMS/Workspaces";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Auth from "./pages/Auth";
+import { DisconnectComponent } from "./components/auth/DisconnectComponent";
+import { useAuthPersistStore } from "./hooks/stores/useAuthPersistStore";
 
 const queryClient = new QueryClient();
 
@@ -38,19 +40,23 @@ export default function App() {
           { path: "/test", element: <div>Test</div> },
         ],
       },
-      { path: "/auth", element: <Auth /> },
+      { path: "/disconnect", element: <DisconnectComponent /> },
       { path: "*", element: <Page404 /> },
     ],
     {
       basename: import.meta.env.VITE_HTACCESS_ORIGIN,
     }
   );
-
+  const authPersistStore = useAuthPersistStore();
   return (
     <React.Fragment>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          <RouterProvider router={router} />
+          {!authPersistStore.isAuthenticated ? (
+            <Auth />
+          ) : (
+            <RouterProvider router={router} />
+          )}
           <Toaster />
         </ThemeProvider>
       </QueryClientProvider>

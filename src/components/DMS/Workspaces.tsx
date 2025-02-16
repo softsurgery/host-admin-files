@@ -76,7 +76,7 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
       <div className="flex flex-col flex-1 overflow-auto gap-4 pr-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
           {workspaces.map((workspace: Workspace) => (
-            <WorkspaceCard workspace={workspace} />
+            <WorkspaceCard key={workspace.id} workspace={workspace} />
           ))}
         </div>
       </div>

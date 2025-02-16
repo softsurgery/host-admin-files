@@ -2,7 +2,9 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface AuthPersistData {
-  isAuthenticated: boolean;
+  token: string;
+  isAuthenticated: boolean | null;
+  setToken: (token: string) => void;
   setAuthenticated: (isAuth: boolean) => void;
   logout: () => void;
 }
@@ -10,13 +12,15 @@ interface AuthPersistData {
 export const useAuthPersistStore = create(
   persist<AuthPersistData>(
     (set) => ({
-      isAuthenticated: false,
+      token: "",
+      isAuthenticated: null,
+      setToken: (token) => set({ token }),
       setAuthenticated: (isAuth) => set({ isAuthenticated: isAuth }),
-      logout: () => set({ isAuthenticated: false }),
+      logout: () => set({ isAuthenticated: false, token: "" }),
     }),
     {
       name: "auth-storage",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => localStorage)
     }
   )
 );

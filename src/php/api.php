@@ -12857,11 +12857,16 @@ namespace Tqdev\PhpCrudApi {
 
 // file: src/index.php
 namespace Tqdev\PhpCrudApi {
+    require "./services/jwt.service.php";
 
     use Tqdev\PhpCrudApi\Api;
     use Tqdev\PhpCrudApi\Config\Config;
     use Tqdev\PhpCrudApi\RequestFactory;
     use Tqdev\PhpCrudApi\ResponseUtils;
+    use JWTService;
+
+    $jwtService = new JWTService();
+
 
     header("Access-Control-Allow-Origin: {{VITE_APP_URL}}");
     header("Access-Control-Allow-Credentials: true");
@@ -12874,13 +12879,22 @@ namespace Tqdev\PhpCrudApi {
         exit();
     }
 
-    session_start();
-
-    if (!isset($_SESSION['user']) || $_SESSION['user']) {
-        http_response_code(301);
+    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    if (!$authHeader || strpos($authHeader, 'Bearer ') !== 0) {
+        http_response_code(401);
         echo json_encode([
-            'status' => '301',
-            'message' => 'Not Authenticated'
+            'status' => '401',
+            'message' => 'Missing or invalid Authorization header'
+        ]);
+        exit();
+    }
+    $jwt = substr($authHeader, 7);
+    $tokenValidation = $jwtService->validateToken($jwt);
+    if (!$tokenValidation) {
+        http_response_code(401);
+        echo json_encode([
+            'status' => '401',
+            'message' => 'Invalid or expired token'
         ]);
         exit();
     }

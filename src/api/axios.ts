@@ -1,3 +1,4 @@
+import { useAuthPersistStore } from "@/hooks/stores/useAuthPersistStore";
 import _axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -8,17 +9,22 @@ const axios = _axios.create({
 });
 
 axios.interceptors.request.use(
-  function (config) {
+  (config) => {
     const excludeCredentials = ["/auth.php"];
-    
+
     if (excludeCredentials.some((url) => config.url?.includes(url))) {
       config.withCredentials = false;
     }
-    
+
+    const token = useAuthPersistStore.getState().token;
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+
     return config;
   },
-  function (err) {
-    return Promise.reject(err);
+  (error) => {
+    return Promise.reject(error);
   }
 );
 

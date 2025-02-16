@@ -39,14 +39,7 @@ export const loginUser = async ({
   return response.data;
 };
 
-// Logout User
-export const logoutUser = async (): Promise<AuthResponse> => {
-  const response = await axios.get<AuthResponse>("/auth.php?logout=true");
-  return response.data;
-};
-
 export const auth = {
   registerUser,
   loginUser,
-  logoutUser,
 };

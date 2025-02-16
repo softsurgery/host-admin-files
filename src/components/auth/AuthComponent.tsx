@@ -17,23 +17,16 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { authSchema } from "@/types/validations/Auth";
 import { ServerResponse } from "@/types/utils/ServerResponse";
-import { useNavigate } from "react-router-dom";
 import { useAuthPersistStore } from "@/hooks/stores/useAuthPersistStore";
 import React from "react";
+import { AuthResponse } from "@/types/Auth";
 
 export function AuthComponent({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const navigate = useNavigate();
   const authStore = useAuthStore();
   const authPersistStore = useAuthPersistStore();
-
-  React.useEffect(() => {
-    if (authPersistStore.isAuthenticated) {
-      navigate("/");
-    }
-  }, [authPersistStore.isAuthenticated]);
 
   const { mutate: authenticateUser, isPending: isAuthenticateUserPending } =
     useMutation({
@@ -43,9 +36,9 @@ export function AuthComponent({
           password: authStore.password,
         });
       },
-      onSuccess: () => {
-        navigate("/");
+      onSuccess: (data: AuthResponse) => {
         authPersistStore.setAuthenticated(true);
+        authPersistStore.setToken(data.token);
         toast.success("Welcome Back, We Are Delighted To Have You Back");
       },
       onError: (error: AxiosError<ServerResponse>) => {

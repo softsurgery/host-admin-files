@@ -11,8 +11,10 @@ import { User } from "lucide-react";
 import { LanguageSwitcher } from "../common/LanguageSwitcher";
 import { Suspense } from "react";
 import { Spinner } from "../common/Spinner";
+import { useNavigate } from "react-router-dom";
 
 export const AccountDropdown = () => {
+  const navigate = useNavigate();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,11 +32,13 @@ export const AccountDropdown = () => {
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuItem>
           <Suspense fallback={<Spinner />}>
-              <LanguageSwitcher />
+            <LanguageSwitcher />
           </Suspense>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => navigate("/disconnect")}>
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

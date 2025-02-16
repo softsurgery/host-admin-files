@@ -30,7 +30,7 @@ def replace_placeholders(src_file, dest_file):
     # Replace placeholders with actual environment values
     placeholders = [
         "DB_HOST", "DB_NAME", "DB_PORT", "DB_USER", "DB_PASSWORD", "DB_CHARSET",
-        "HTACCESS_ORIGIN", "VITE_APP_URL"
+        "HTACCESS_ORIGIN", "VITE_APP_URL" ,'JWT_SECRET_KEY'
     ]
     for key in placeholders:
         content = content.replace(f"{{{{{key}}}}}", os.getenv(key, f"{{{key}}}"))  # Default to keeping placeholder
@@ -81,6 +81,7 @@ def main():
     dist_dir = "dist/php"
     dist_api = os.path.join(dist_dir, "api.php")
     dist_connect = os.path.join(dist_dir, "connect.php")
+    dist_jwt_service = os.path.join(dist_dir, "services/jwt.service.php")
     htaccess_src = "src/.htaccess"
     htaccess_dest = "dist/.htaccess"
 
@@ -98,6 +99,7 @@ def main():
     # Step 4: Replace placeholders in copied files
     replace_placeholders(dist_api, dist_api)
     replace_placeholders(dist_connect, dist_connect)
+    replace_placeholders(dist_jwt_service, dist_jwt_service)
     replace_placeholders(htaccess_dest, htaccess_dest)
 
     print("Build process complete!")
