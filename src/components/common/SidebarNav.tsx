@@ -69,7 +69,7 @@ export default function SidebarNav({
                 onClick={() => handleSelect(item.href)}
                 className={cn(
                   location.pathname === item.href
-                    ? "bg-slate-300 dark:bg-gray-700"
+                    ? "bg-slate-300 dark:bg-zinc-700"
                     : "hover:underline",
                   "justify-start"
                 )}

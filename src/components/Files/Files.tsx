@@ -185,9 +185,9 @@ export default function Files() {
 
   return (
     <div className="flex flex-col flex-1 overflow-auto p-5 no-scrollbar">
-      <div>
+      {/* <div>
         <FileUploader className="my-5" maxFileCount={Infinity} />
-      </div>
+      </div> */}
       <DataTable columns={getFileColumns()} data={data} />
     </div>
   );

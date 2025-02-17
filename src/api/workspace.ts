@@ -38,9 +38,15 @@ const fetchAll = async (
   return response.data;
 };
 
+const fetchOne = async (id?: number): Promise<Workspace> => {
+  const response = await axios.get(`/api.php/records/workspaces/${id}`);
+  return response.data;
+};
+
 export const workspace = {
   create,
   update,
   remove,
   fetchAll,
+  fetchOne,
 };

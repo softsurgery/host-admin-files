@@ -2,18 +2,11 @@ import { cn } from "@/lib/utils";
 import { WorkspaceEntry } from "./WorkspaceEntry";
 import React from "react";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import ContentSection from "../common/ContentSection";
+import ContentSection from "../../common/ContentSection";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { Button } from "@/components/ui/button";
-import { useWorkspaceCreateSheet } from "./Workspaces/modals/WorkspaceCreateSheet";
+import { useWorkspaceCreateSheet } from "./modals/WorkspaceCreateSheet";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { Workspace } from "@/types/Workspace";
@@ -22,12 +15,10 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { ServerResponse } from "@/types/utils/ServerResponse";
 import { workspaceSchema } from "@/types/validations/Workspace";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useWorkspaceDeleteDialog } from "./Workspaces/modals/WorkspaceDeleteDialog";
-import { useWorkspaceUpdateSheet } from "./Workspaces/modals/WorkspaceUpdateSheet";
+import { useWorkspaceDeleteDialog } from "./modals/WorkspaceDeleteDialog";
+import { useWorkspaceUpdateSheet } from "./modals/WorkspaceUpdateSheet";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Spinner } from "../common/Spinner";
-import { Label } from "../ui/label";
+import { Label } from "@/components/ui/label";
 
 interface WorkspacesProps {
   className?: string;
@@ -44,6 +35,13 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
   const { value: debouncedSearchTerm, loading: searching } =
     useDebounce<string>(searchTerm, 500);
 
+  const handleSearchChange = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(e.target.value);
+    },
+    []
+  );
+
   const {
     data: workspaceResp,
     isPending: isWorkspaceRespPending,
@@ -51,7 +49,7 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
   } = useQuery({
     queryKey: ["workspaces", debouncedSearchTerm],
     queryFn: () =>
-      api.workspace.fetchAll({ search: `search=${debouncedSearchTerm}` }),
+      api.workspace.fetchAll({ search: `search=${debouncedSearchTerm}` })
   });
 
   const workspaceStore = useWorkspaceStore();
@@ -170,25 +168,15 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
               type="search"
               placeholder="Search..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e)}
               className="w-full rounded-lg  pl-8 md:w-[200px] lg:w-[336px]"
             />
           </div>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
           <Button onClick={openCreateWorkspaceSheet}>Add New Workspace</Button>
         </div>
       </ContentSection>
 
-      <div className="flex flex-col flex-1overflow-auto gap-4 mt-5">
+      <div className="flex flex-col flex-1overflow-auto gap-4 mt-5 mx-2">
         <div className="flex flex-col gap-4 items-center justify-center">
           {isPending ? (
             <div className="flex flex-row gap-4 items-center justify-center">

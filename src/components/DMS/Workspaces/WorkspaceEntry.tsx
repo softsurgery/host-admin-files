@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Workspace } from "@/types/Workspace";
-import { EllipsisIcon } from "lucide-react";
+import { EllipsisIcon, PenBox, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 interface WorkspaceEntryProps {
   className?: string;
@@ -25,10 +26,11 @@ export const WorkspaceEntry = ({
   openUpdateDialog,
   openDeleteDialog,
 }: WorkspaceEntryProps) => {
+  const navigate = useNavigate();
   return (
     <div
       className={cn(
-        "flex flex-row justify-between items-center w-full p-4 rounded-md shadow-md border",
+        "flex flex-row justify-between items-center w-full p-4 rounded-md shadow-md border hover:-translate-x-1 transition-transform",
         className
       )}
     >
@@ -37,19 +39,27 @@ export const WorkspaceEntry = ({
           {workspace?.name ? (
             workspace?.name
           ) : (
-            <span className="font-thin">- No Name Provided -</span>
+            <span className="font-thin">No Name Provided</span>
           )}
         </Label>
         <Label className="font-thin truncate">
           {workspace?.description ? (
             workspace?.description
           ) : (
-            <span className="font-thin">- No Description Provided -</span>
+            <span className="font-thin">No Description Provided</span>
           )}
         </Label>
         <Label className="text-xs"> Created At : {workspace?.created_at}</Label>
       </div>
-      <div>
+      <div className="flex flex-row gap-2">
+        <Button
+          variant="secondary"
+          onClick={() => {
+            navigate(`/dms/workspaces/${workspace?.id}`);
+          }}
+        >
+          Inspect
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Button variant="outline" size="icon" className="w-5 h-5 p-4">
@@ -59,12 +69,15 @@ export const WorkspaceEntry = ({
           <DropdownMenuContent align="end" side="bottom">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={openUpdateDialog}>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={openUpdateDialog}>
+              <PenBox />
+              Edit
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="text-red-500"
               onClick={openDeleteDialog}
             >
-              Delete
+              <Trash /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
