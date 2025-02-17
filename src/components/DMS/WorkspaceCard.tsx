@@ -1,32 +1,44 @@
 import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
 import { Workspace } from "@/types/Workspace";
+import { EllipsisIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
-interface WorkspaceCardProps {
+interface WorkspaceEntryProps {
   className?: string;
   workspace?: Workspace;
 }
 
-export const WorkspaceCard = ({ className, workspace }: WorkspaceCardProps) => {
+export const WorkspaceEntry = ({ className, workspace }: WorkspaceEntryProps) => {
   return (
-    <Card className={cn("w-full", className)}>
-      <CardHeader>
-        <CardTitle>{workspace?.name}</CardTitle>
-        <CardDescription>{workspace?.description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>Workspace</p>
-      </CardContent>
-      <CardFooter>
-        <p>Workspace</p>
-      </CardFooter>
-    </Card>
+    <div
+      className={cn(
+        "flex flex-row justify-between items-center w-full p-4 rounded-md shadow-md border",
+        className
+      )}
+    >
+      <div className="flex flex-col gap-2">
+        <Label className="font-bold">
+          {workspace?.name ? (
+            workspace?.name
+          ) : (
+            <span className="font-thin">- No Name Provided -</span>
+          )}
+        </Label>
+        <Label className="font-thin">
+          {workspace?.description ? (
+            workspace?.description
+          ) : (
+            <span className="font-thin">- No Description Provided -</span>
+          )}
+        </Label>
+        <Label className="text-xs"> Created At : {workspace?.created_at}</Label>
+      </div>
+      <div>
+        <Button variant="outline" size="icon" className="w-5 h-5 p-4">
+          <EllipsisIcon />
+        </Button>
+      </div>
+    </div>
   );
 };

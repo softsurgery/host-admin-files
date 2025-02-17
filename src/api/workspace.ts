@@ -2,7 +2,7 @@ import axios from "./axios";
 import { Workspace } from "@/types/Workspace";
 import { ServerApiResponse } from "@/types/utils/ServerResponse";
 
-const create = async (workspace: Workspace): Promise<number> => {
+const create = async (workspace: Partial<Workspace>): Promise<number> => {
   const response = await axios.post("/api.php/records/workspaces", workspace);
   return response.data;
 };
