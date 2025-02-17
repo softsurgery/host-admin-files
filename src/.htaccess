@@ -1,7 +1,6 @@
 # Enable URL rewriting
 RewriteEngine On
 
-SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
 RewriteBase {{HTACCESS_ORIGIN}}
 
 RewriteCond %{REQUEST_FILENAME} -f [OR]

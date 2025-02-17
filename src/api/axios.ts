@@ -18,7 +18,7 @@ axios.interceptors.request.use(
 
     const token = useAuthPersistStore.getState().token;
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers["X-Authorization"] = `Bearer ${token}`;
     }
 
     return config;

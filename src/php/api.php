@@ -12871,7 +12871,7 @@ namespace Tqdev\PhpCrudApi {
     header("Access-Control-Allow-Origin: {{VITE_APP_URL}}");
     header("Access-Control-Allow-Credentials: true");
     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+    header("Access-Control-Allow-Headers: Content-Type, X-Authorization");
 
     // Handle Preflight
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -12879,7 +12879,7 @@ namespace Tqdev\PhpCrudApi {
         exit();
     }
 
-    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    $authHeader = $_SERVER['HTTP_X_AUTHORIZATION'] ?? '';
     if (!$authHeader || strpos($authHeader, 'Bearer ') !== 0) {
         http_response_code(401);
         echo json_encode([
