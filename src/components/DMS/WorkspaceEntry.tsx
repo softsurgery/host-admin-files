@@ -40,7 +40,7 @@ export const WorkspaceEntry = ({
             <span className="font-thin">- No Name Provided -</span>
           )}
         </Label>
-        <Label className="font-thin">
+        <Label className="font-thin truncate">
           {workspace?.description ? (
             workspace?.description
           ) : (
@@ -56,7 +56,7 @@ export const WorkspaceEntry = ({
               <EllipsisIcon />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="center" side="bottom">
+          <DropdownMenuContent align="end" side="bottom">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openUpdateDialog}>Edit</DropdownMenuItem>

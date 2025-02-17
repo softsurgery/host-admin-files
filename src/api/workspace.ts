@@ -1,5 +1,6 @@
 import axios from "./axios";
 import { Workspace } from "@/types/Workspace";
+import { QueryParams } from "@/types/utils/QueryParams";
 import { ServerApiResponse } from "@/types/utils/ServerResponse";
 
 const create = async (workspace: Partial<Workspace>): Promise<number> => {
@@ -23,8 +24,17 @@ const remove = async (id?: number): Promise<boolean> => {
   return response.data;
 };
 
-const fetchAll = async (): Promise<ServerApiResponse<Workspace>> => {
-  const response = await axios.get("/api.php/records/workspaces");
+const fetchAll = async (
+  params?: QueryParams
+): Promise<ServerApiResponse<Workspace>> => {
+  const queryString = params
+    ? Object.values(params)
+        .filter((value) => value)
+        .join("&")
+    : "";
+  const response = await axios.get(
+    `/api.php/records/workspaces?${queryString}`
+  );
   return response.data;
 };
 

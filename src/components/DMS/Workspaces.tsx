@@ -25,6 +25,9 @@ import { workspaceSchema } from "@/types/validations/Workspace";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWorkspaceDeleteDialog } from "./Workspaces/modals/WorkspaceDeleteDialog";
 import { useWorkspaceUpdateSheet } from "./Workspaces/modals/WorkspaceUpdateSheet";
+import { useDebounce } from "@/hooks/useDebounce";
+import { Spinner } from "../common/Spinner";
+import { Label } from "../ui/label";
 
 interface WorkspacesProps {
   className?: string;
@@ -37,13 +40,18 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
     setRoutes?.([{ title: "DMS" }, { title: "Workspaces" }]);
   }, []);
 
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const { value: debouncedSearchTerm, loading: searching } =
+    useDebounce<string>(searchTerm, 500);
+
   const {
     data: workspaceResp,
     isPending: isWorkspaceRespPending,
     refetch: refetchWorkspaces,
   } = useQuery({
-    queryKey: ["workspaces"],
-    queryFn: () => api.workspace.fetchAll(),
+    queryKey: ["workspaces", debouncedSearchTerm],
+    queryFn: () =>
+      api.workspace.fetchAll({ search: `search=${debouncedSearchTerm}` }),
   });
 
   const workspaceStore = useWorkspaceStore();
@@ -126,7 +134,6 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
     resetWorkspace: () => workspaceStore.reset(),
   });
 
-
   const {
     updateWorkspaceSheet,
     openUpdateWorkspaceSheet,
@@ -136,7 +143,6 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
     isUpdatePending,
     resetWorkspace: () => workspaceStore.reset(),
   });
-
 
   const {
     deleteWorkspaceDialog,
@@ -148,6 +154,8 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
     isDeletionPending: false,
   });
 
+  const isPending = isWorkspaceRespPending || searching;
+
   return (
     <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
       <ContentSection
@@ -157,11 +165,13 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
       >
         <div className="flex flex-row gap-2 ">
           <div className="relative ml-auto flex-1 md:grow-0">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Search..."
-              className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full rounded-lg  pl-8 md:w-[200px] lg:w-[336px]"
             />
           </div>
           <Select>
@@ -178,29 +188,32 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
         </div>
       </ContentSection>
 
-      <div className="flex flex-col flex-1 overflow-auto gap-4 mt-5">
-        {isWorkspaceRespPending ? (
-          <React.Fragment>
-            <Skeleton className="w-full h-24" />
-            <Skeleton className="w-full h-24" />
-          </React.Fragment>
-        ) : (
-          workspaces.map((workspace: Workspace) => (
-            <WorkspaceEntry
-              key={workspace.id}
-              workspace={workspace}
-              openUpdateDialog={() => {
-                workspaceStore.setWorkspace(workspace);
-                openUpdateWorkspaceSheet();
-              }}
-              openDeleteDialog={() => {
-                workspaceStore.set("id", workspace.id);
-                workspaceStore.set("name", workspace.name);
-                openDeleteWorkspaceDialog();
-              }}
-            />
-          ))
-        )}
+      <div className="flex flex-col flex-1overflow-auto gap-4 mt-5">
+        <div className="flex flex-col gap-4 items-center justify-center">
+          {isPending ? (
+            <div className="flex flex-row gap-4 items-center justify-center">
+              <Label>Searching</Label>
+            </div>
+          ) : workspaces.length == 0 ? (
+            <Label>No Results Found</Label>
+          ) : (
+            workspaces.map((workspace: Workspace) => (
+              <WorkspaceEntry
+                key={workspace.id}
+                workspace={workspace}
+                openUpdateDialog={() => {
+                  workspaceStore.setWorkspace(workspace);
+                  openUpdateWorkspaceSheet();
+                }}
+                openDeleteDialog={() => {
+                  workspaceStore.set("id", workspace.id);
+                  workspaceStore.set("name", workspace.name);
+                  openDeleteWorkspaceDialog();
+                }}
+              />
+            ))
+          )}
+        </div>
       </div>
       {createWorkspaceSheet}
       {updateWorkspaceSheet}
