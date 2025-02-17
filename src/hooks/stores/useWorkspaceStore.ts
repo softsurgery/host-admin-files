@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 interface WorkspaceData {
+  id?: number;
   name: string;
   description: string;
   errors?: Record<string, string>;
@@ -13,6 +14,7 @@ interface WorkspaceStore extends WorkspaceData {
 }
 
 const WorkspaceStoreDataDefaults: WorkspaceData = {
+  id: undefined,
   name: "",
   description: "",
   errors: {},

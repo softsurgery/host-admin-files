@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { WorkspaceEntry } from "./WorkspaceCard";
+import { WorkspaceEntry } from "./WorkspaceEntry";
 import React from "react";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import ContentSection from "../common/ContentSection";
@@ -23,6 +23,7 @@ import { AxiosError } from "axios";
 import { ServerResponse } from "@/types/utils/ServerResponse";
 import { workspaceSchema } from "@/types/validations/Workspace";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useWorkspaceDeleteDialog } from "./Workspaces/modals/WorkspaceDeleteDialog";
 
 interface WorkspacesProps {
   className?: string;
@@ -64,6 +65,21 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
     },
   });
 
+  const { mutate: deleteWorkspace } = useMutation({
+    mutationFn: async () => {
+      return api.workspace.remove(workspaceStore.id);
+    },
+    onSuccess: () => {
+      workspaceStore.reset();
+      refetchWorkspaces();
+      closeDeleteWorkspaceDialog();
+      toast.success("Workspace deleted successfully");
+    },
+    onError: (error: AxiosError<ServerResponse>) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+
   const handleCreateWorkspace = () => {
     const data = workspaceStore.get();
     const result = workspaceSchema.safeParse(data);
@@ -83,6 +99,16 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
     createWorkspace: handleCreateWorkspace,
     isCreatePending: false,
     resetWorkspace: () => {},
+  });
+
+  const {
+    deleteWorkspaceDialog,
+    openDeleteWorkspaceDialog,
+    closeDeleteWorkspaceDialog,
+  } = useWorkspaceDeleteDialog({
+    workspaceLabel: workspaceStore.name,
+    deleteWorkspace: deleteWorkspace,
+    isDeletionPending: false,
   });
 
   return (
@@ -123,12 +149,21 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
           </React.Fragment>
         ) : (
           workspaces.map((workspace: Workspace) => (
-            <WorkspaceEntry key={workspace.id} workspace={workspace} />
+            <WorkspaceEntry
+              key={workspace.id}
+              workspace={workspace}
+              openDeleteDialog={() => {
+                workspaceStore.set("id", workspace.id);
+                workspaceStore.set("name", workspace.name);
+                openDeleteWorkspaceDialog();
+              }}
+            />
           ))
         )}
       </div>
 
       {createWorkspaceSheet}
+      {deleteWorkspaceDialog}
     </div>
   );
 };

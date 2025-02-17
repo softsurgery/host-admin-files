@@ -3,13 +3,26 @@ import { Workspace } from "@/types/Workspace";
 import { EllipsisIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface WorkspaceEntryProps {
   className?: string;
   workspace?: Workspace;
+  openDeleteDialog?: () => void;
 }
 
-export const WorkspaceEntry = ({ className, workspace }: WorkspaceEntryProps) => {
+export const WorkspaceEntry = ({
+  className,
+  workspace,
+  openDeleteDialog,
+}: WorkspaceEntryProps) => {
   return (
     <div
       className={cn(
@@ -35,9 +48,24 @@ export const WorkspaceEntry = ({ className, workspace }: WorkspaceEntryProps) =>
         <Label className="text-xs"> Created At : {workspace?.created_at}</Label>
       </div>
       <div>
-        <Button variant="outline" size="icon" className="w-5 h-5 p-4">
-          <EllipsisIcon />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="outline" size="icon" className="w-5 h-5 p-4">
+              <EllipsisIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="center" side="bottom">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-red-500"
+              onClick={openDeleteDialog}
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
