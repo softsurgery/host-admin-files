@@ -1,3 +1,4 @@
+import { Workspace } from "@/types/Workspace";
 import { create } from "zustand";
 
 interface WorkspaceData {
@@ -9,6 +10,7 @@ interface WorkspaceData {
 
 interface WorkspaceStore extends WorkspaceData {
   set: (attribute: keyof WorkspaceData, value: unknown) => void;
+  setWorkspace: (workspace: Workspace) => void;
   get: () => WorkspaceData;
   reset: () => void;
 }
@@ -27,6 +29,13 @@ export const useWorkspaceStore = create<WorkspaceStore>((set, get) => ({
       ...state,
       [attribute]: value,
     }));
+  },
+  setWorkspace: (workspace) => {
+    set({
+      id: workspace.id,
+      name: workspace.name,
+      description: workspace.description,
+    });
   },
   get: () => {
     const data = get();

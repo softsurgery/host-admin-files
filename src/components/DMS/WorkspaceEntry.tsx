@@ -15,12 +15,14 @@ import {
 interface WorkspaceEntryProps {
   className?: string;
   workspace?: Workspace;
+  openUpdateDialog?: () => void;
   openDeleteDialog?: () => void;
 }
 
 export const WorkspaceEntry = ({
   className,
   workspace,
+  openUpdateDialog,
   openDeleteDialog,
 }: WorkspaceEntryProps) => {
   return (
@@ -57,7 +59,7 @@ export const WorkspaceEntry = ({
           <DropdownMenuContent align="center" side="bottom">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={openUpdateDialog}>Edit</DropdownMenuItem>
             <DropdownMenuItem
               className="text-red-500"
               onClick={openDeleteDialog}

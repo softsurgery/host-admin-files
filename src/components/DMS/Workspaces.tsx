@@ -24,6 +24,7 @@ import { ServerResponse } from "@/types/utils/ServerResponse";
 import { workspaceSchema } from "@/types/validations/Workspace";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWorkspaceDeleteDialog } from "./Workspaces/modals/WorkspaceDeleteDialog";
+import { useWorkspaceUpdateSheet } from "./Workspaces/modals/WorkspaceUpdateSheet";
 
 interface WorkspacesProps {
   className?: string;
@@ -51,14 +52,27 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
     return workspaceResp?.records || [];
   }, [workspaceResp]);
 
-  const { mutate: createWorkspace } = useMutation({
+  const { mutate: createWorkspace, isPending: isCreatePending } = useMutation({
     mutationFn: async () => {
       return api.workspace.create(workspaceStore.get());
     },
     onSuccess: () => {
-      workspaceStore.reset();
       refetchWorkspaces();
       toast.success("Workspace created successfully");
+    },
+    onError: (error: AxiosError<ServerResponse>) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+
+  const { mutate: updateWorkspace, isPending: isUpdatePending } = useMutation({
+    mutationFn: async () => {
+      return api.workspace.update(workspaceStore.id, workspaceStore.get());
+    },
+    onSuccess: () => {
+      workspaceStore.reset();
+      refetchWorkspaces();
+      toast.success("Workspace updated successfully");
     },
     onError: (error: AxiosError<ServerResponse>) => {
       toast.error(error?.response?.data?.message);
@@ -91,15 +105,38 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
     }
   };
 
+  const handleUpdateWorkspace = () => {
+    const data = workspaceStore.get();
+    const result = workspaceSchema.safeParse(data);
+    if (!result.success) {
+      workspaceStore.set("errors", result.error.flatten().fieldErrors);
+    } else {
+      updateWorkspace();
+      closeUpdateWorkspaceSheet();
+    }
+  };
+
   const {
     createWorkspaceSheet,
     openCreateWorkspaceSheet,
     closeCreateWorkspaceSheet,
   } = useWorkspaceCreateSheet({
     createWorkspace: handleCreateWorkspace,
-    isCreatePending: false,
-    resetWorkspace: () => {},
+    isCreatePending,
+    resetWorkspace: () => workspaceStore.reset(),
   });
+
+
+  const {
+    updateWorkspaceSheet,
+    openUpdateWorkspaceSheet,
+    closeUpdateWorkspaceSheet,
+  } = useWorkspaceUpdateSheet({
+    updateWorkspace: handleUpdateWorkspace,
+    isUpdatePending,
+    resetWorkspace: () => workspaceStore.reset(),
+  });
+
 
   const {
     deleteWorkspaceDialog,
@@ -152,6 +189,10 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
             <WorkspaceEntry
               key={workspace.id}
               workspace={workspace}
+              openUpdateDialog={() => {
+                workspaceStore.setWorkspace(workspace);
+                openUpdateWorkspaceSheet();
+              }}
               openDeleteDialog={() => {
                 workspaceStore.set("id", workspace.id);
                 workspaceStore.set("name", workspace.name);
@@ -161,8 +202,8 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
           ))
         )}
       </div>
-
       {createWorkspaceSheet}
+      {updateWorkspaceSheet}
       {deleteWorkspaceDialog}
     </div>
   );

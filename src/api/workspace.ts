@@ -7,6 +7,17 @@ const create = async (workspace: Partial<Workspace>): Promise<number> => {
   return response.data;
 };
 
+const update = async (
+  id?: number,
+  workspace?: Partial<Workspace>
+): Promise<boolean> => {
+  const response = await axios.put(
+    `/api.php/records/workspaces/${id}`,
+    workspace
+  );
+  return response.data;
+};
+
 const remove = async (id?: number): Promise<boolean> => {
   const response = await axios.delete(`/api.php/records/workspaces/${id}`);
   return response.data;
@@ -19,6 +30,7 @@ const fetchAll = async (): Promise<ServerApiResponse<Workspace>> => {
 
 export const workspace = {
   create,
+  update,
   remove,
   fetchAll,
 };
