@@ -46,23 +46,27 @@ export function useSheet({
 
   const isDesktop = useMediaQuery("(min-width: 1500px)");
   const suitableSide = side ? side : isDesktop ? "right" : "bottom";
-  const suitableHeight = isDesktop || side ? "min-h-screen" : "h-[500px]";
 
   const SheetFragment = ReactDOM.createPortal(
     <React.Fragment>
       <Sheet open={isOpen} onOpenChange={onOpenChange}>
         <SheetContent
           side={suitableSide}
-          className={cn(suitableHeight, "overflow-auto", className)}
+          className={cn(
+            "max-h-screen h-full flex flex-col overflow-hidden",
+            className
+          )}
           onPointerDownOutside={(e) => {
             e.preventDefault();
           }}
         >
-          <SheetHeader>
+          <SheetHeader className="flex-shrink-0">
             <SheetTitle>{title}</SheetTitle>
             <SheetDescription>{description}</SheetDescription>
           </SheetHeader>
-          {children}
+          <div className="flex-1 overflow-auto">
+            {children}
+          </div>
         </SheetContent>
       </Sheet>
     </React.Fragment>,
