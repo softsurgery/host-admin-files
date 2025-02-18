@@ -59,6 +59,15 @@ def copy_php_files(src, dest):
             print(f"Copying file {s} -> {d}...")
             shutil.copy(s, d)
 
+def create_uploads_folder():
+    """Create uploads folder in dist if it doesn't exist."""
+    uploads_dir = os.path.join("dist", "uploads")
+    if not os.path.exists(uploads_dir):
+        print("Creating uploads folder...")
+        os.makedirs(uploads_dir, exist_ok=True)
+    else:
+        print("Uploads folder already exists. Skipping creation.")
+
 def main():
     # Check for environment argument
     if len(sys.argv) < 2:
@@ -104,5 +113,7 @@ def main():
 
     print("Build process complete!")
 
+    # Step 5: Create uploads folder in dist
+    create_uploads_folder()
 if __name__ == "__main__":
     main()
