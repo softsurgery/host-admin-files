@@ -12857,7 +12857,7 @@ namespace Tqdev\PhpCrudApi {
 
 // file: src/index.php
 namespace Tqdev\PhpCrudApi {
-    require "./services/jwt.service.php";
+    require_once "./services/jwt.service.php";
 
     use Tqdev\PhpCrudApi\Api;
     use Tqdev\PhpCrudApi\Config\Config;
