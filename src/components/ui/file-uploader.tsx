@@ -191,7 +191,7 @@ export function FileUploader(props: FileUploaderProps) {
   const isDisabled = disabled || (files?.length ?? 0) >= maxFileCount;
 
   return (
-    <div className="relative flex justify-center items-center gap-2 overflow-hidden">
+    <div className={cn("flex flex-row gap-4", className)}>
       <Dropzone
         onDrop={onDrop}
         accept={accept}
@@ -204,17 +204,16 @@ export function FileUploader(props: FileUploaderProps) {
           <div
             {...getRootProps()}
             className={cn(
-              "group relative grid h-52 w-2/3 cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition hover:bg-muted/25",
+              "flex h-full w-2/3 cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition hover:bg-muted/25",
               "ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
               isDragActive && "border-muted-foreground/50",
-              isDisabled && "pointer-events-none opacity-60",
-              className
+              isDisabled && "pointer-events-none opacity-60"
             )}
             {...dropzoneProps}
           >
             <input {...getInputProps()} />
             {isDragActive ? (
-              <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
+              <div className="flex flex-col items-center justify-center gap-4 sm:px-5 w-full">
                 <div className="rounded-full border border-dashed p-3">
                   <UploadIcon
                     className="size-7 text-muted-foreground"
@@ -226,14 +225,14 @@ export function FileUploader(props: FileUploaderProps) {
                 </p>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
+              <div className="flex flex-col items-center justify-center gap-4 sm:px-5 w-full">
                 <div className="rounded-full border border-dashed p-3">
                   <UploadIcon
                     className="size-7 text-muted-foreground"
                     aria-hidden="true"
                   />
                 </div>
-                <div className="flex flex-col gap-px">
+                <div className="flex flex-col">
                   <p className="font-medium text-muted-foreground">
                     Drag & Drop File here
                   </p>
@@ -259,7 +258,7 @@ export function FileUploader(props: FileUploaderProps) {
           </div>
         </ScrollArea>
       ) : (
-        <Label className="text-base font-bold w-1/3 flex justify-center gap-2">
+        <Label className="text-base font-bold w-1/3 flex justify-center gap-2 items-center">
           No Selected Files <PackageOpen />
         </Label>
       )}

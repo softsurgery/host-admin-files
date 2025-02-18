@@ -13,8 +13,9 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
-  const { setPage, searchTerm, setSearchTerm } =
+  const { setPage, searchTerm, setSearchTerm, openUploadSheet } =
     useFileActions();
+
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex flex-1 items-center space-x-2">
@@ -41,7 +42,7 @@ export function DataTableToolbar<TData>({
       <Button
         className="h-8 px-2 lg:px-3"
         variant="ghost"
-        // onClick={openCreateFileSheet}
+        onClick={openUploadSheet}
       >
         <PackagePlus className="h-6 w-6" />
         New File
