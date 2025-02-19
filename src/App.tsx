@@ -6,8 +6,7 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import { Toaster } from "sonner";
-import { ThemeProvider } from "./components/theme-provider";
+import { ThemeProvider, useTheme } from "./components/theme-provider";
 import DMSMain from "./components/DMS/DMSMain";
 import Page404 from "./components/common/Page404";
 import ComingSoon from "./components/common/ComingSoon";
@@ -17,9 +16,12 @@ import Auth from "./pages/Auth";
 import { DisconnectComponent } from "./components/auth/DisconnectComponent";
 import { useAuthPersistStore } from "./hooks/stores/useAuthPersistStore";
 import { WorspaceDetails } from "./components/DMS/Workspaces/WorspaceDetails";
+import { Toaster } from "@/components/ui/sonner";
 
 const queryClient = new QueryClient();
 export default function App() {
+  const { theme } = useTheme();
+  console.log("theme", theme);
   const router = createBrowserRouter(
     [
       {
@@ -58,7 +60,7 @@ export default function App() {
           ) : (
             <RouterProvider router={router} />
           )}
-          <Toaster />
+          <Toaster theme={theme == "dark" ? "dark" : "light"} />
         </ThemeProvider>
       </QueryClientProvider>
     </React.Fragment>
