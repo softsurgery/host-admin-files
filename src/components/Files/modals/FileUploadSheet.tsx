@@ -3,18 +3,20 @@ import { Button } from "@/components/ui/button";
 import { useSheet } from "@/components/common/Sheet";
 import { Spinner } from "@/components/common/Spinner";
 import { FileUploader } from "@/components/ui/file-uploader";
+import { useFileUploaderStore } from "@/hooks/stores/useFileUploaderStore";
 
 interface FileUploadSheetProps {
-  uploadFile?: () => void;
+  uploadFiles?: () => void;
   isUploadPending?: boolean;
   resetFile?: () => void;
 }
 
 export const useFileUploadSheet = ({
-  uploadFile,
+  uploadFiles,
   isUploadPending,
   resetFile,
 }: FileUploadSheetProps) => {
+  const fileUploaderStore = useFileUploaderStore();
   const {
     SheetFragment: uploadFileSheet,
     openSheet: openUploadFileSheet,
@@ -29,11 +31,18 @@ export const useFileUploadSheet = ({
     description: "Use this form to define a new file within the system",
     children: (
       <div className="flex flex-col h-full">
-        <FileUploader className="flex-1 my-5"  maxFileCount={Infinity} />
+        <FileUploader
+          className="flex-1 my-5"
+          maxFileCount={Infinity}
+          value={fileUploaderStore.files}
+          onValueChange={(files) => {
+            fileUploaderStore.setFiles(files);
+          }}
+        />
         <div className="flex gap-2 my-4 justify-end">
           <Button
             onClick={() => {
-              uploadFile?.();
+              uploadFiles?.();
             }}
           >
             Save
@@ -50,7 +59,7 @@ export const useFileUploadSheet = ({
         </div>
       </div>
     ),
-    className: "min-w-[90vw]",
+    className: "min-w-[70vw]",
     onToggle: resetFile,
   });
 

@@ -30,7 +30,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default undefined
    * @example value={files}
    */
-  value?: (File & { preview: string })[];
+  value?: (File & { preview?: string })[];
 
   /**
    * Function to be called when the value changes.
@@ -268,7 +268,7 @@ export function FileUploader(props: FileUploaderProps) {
 
 interface FileCardProps {
   key: number;
-  file: File & { preview: string };
+  file: File & { preview?: string };
   onRemove: () => void;
   progress?: number;
 }

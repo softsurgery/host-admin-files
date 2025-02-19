@@ -3,18 +3,40 @@ import { DataTable } from "./data-table/data-table";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { api } from "@/api";
 import { getFileColumns } from "./data-table/columns";
-import { BFile } from "@/types/BFile";
 import { cn } from "@/lib/utils";
 import { FileActionsContext } from "./data-table/action-context";
 import { useFileUploadSheet } from "./modals/FileUploadSheet";
+import { useFileUploaderStore } from "@/hooks/stores/useFileUploaderStore";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface FilePanelProps {
   className?: string;
 }
 
 export default function FilePanel({ className }: FilePanelProps) {
-  const [data, setData] = React.useState<BFile[] | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(true);
+  const fileUploaderStore = useFileUploaderStore();
+
+  const { data: filesResp, isPending: isFilesRespPending } = useQuery({
+    queryKey: ["files"],
+    queryFn: async () => api.file.fetchAll(),
+  });
+
+  const files = React.useMemo(() => {
+    return filesResp?.records || [];
+  }, [filesResp]);
+
+  const { mutate: uploadFiles, isPending: isUploadPending } = useMutation({
+    mutationFn: async () => api.upload.uploadMany(fileUploaderStore.files),
+    onSuccess: () => {
+      closeUploadFileSheet();
+      fileUploaderStore.reset();
+      toast.success("Files uploaded successfully");
+    },
+    onError: () => {
+      console.log("error");
+    },
+  });
 
   const { setRoutes } = useBreadcrumb();
 
@@ -25,21 +47,9 @@ export default function FilePanel({ className }: FilePanelProps) {
     ]);
   }, []);
 
-  React.useEffect(() => {
-    const fetch = async () => {
-      setLoading(true);
-      const data = await api.file.fetchAll();
-      setData(data.records);
-      setLoading(false);
-    };
-    fetch();
-  }, []);
-
-  const { uploadFileSheet, openUploadFileSheet } =
+  const { uploadFileSheet, openUploadFileSheet, closeUploadFileSheet } =
     useFileUploadSheet({
-      uploadFile: async () => {
-        console.log("hello");
-      },
+      uploadFiles,
       isUploadPending: false,
       resetFile: () => {},
     });
@@ -47,13 +57,6 @@ export default function FilePanel({ className }: FilePanelProps) {
   const context = {
     openUploadSheet: openUploadFileSheet,
   };
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!data || data.length === 0) {
-    return <div>No data available</div>;
-  }
 
   return (
     <FileActionsContext.Provider value={context}>
@@ -63,7 +66,7 @@ export default function FilePanel({ className }: FilePanelProps) {
           className
         )}
       >
-        <DataTable columns={getFileColumns()} data={data} />
+        <DataTable columns={getFileColumns()} data={files} />
       </div>
       {uploadFileSheet}
     </FileActionsContext.Provider>
