@@ -1,17 +1,10 @@
 <?php
 
-include 'services/jwt.service.php';
-include 'services/auth.service.php';
-include 'connect.php';
+require_once "./utils/headers.php";
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header('Content-Type: application/json');
+require_once  'services/jwt.service.php';
+require_once  'services/auth.service.php';
+require_once  'connect.php';
 
 $jwtService = new JWTService();
 $authService = new AuthService($pdo, $jwtService);

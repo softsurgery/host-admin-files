@@ -12857,6 +12857,8 @@ namespace Tqdev\PhpCrudApi {
 
 // file: src/index.php
 namespace Tqdev\PhpCrudApi {
+    require_once "./utils/headers.php";
+
     require_once "./services/jwt.service.php";
 
     use Tqdev\PhpCrudApi\Api;
@@ -12866,18 +12868,6 @@ namespace Tqdev\PhpCrudApi {
     use JWTService;
 
     $jwtService = new JWTService();
-
-
-    header("Access-Control-Allow-Origin: {{VITE_APP_URL}}");
-    header("Access-Control-Allow-Credentials: true");
-    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, X-Authorization");
-
-    // Handle Preflight
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        http_response_code(200);
-        exit();
-    }
 
     $authHeader = $_SERVER['HTTP_X_AUTHORIZATION'] ?? '';
     if (!$authHeader || strpos($authHeader, 'Bearer ') !== 0) {

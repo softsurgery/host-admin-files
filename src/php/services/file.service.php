@@ -4,7 +4,6 @@ class FileService
 {
     private $uploadDir;
     private $allowedTypes;
-
     private $maxSize;
 
     public function __construct($uploadDir = '../uploads/', $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'], $maxSize = 2097152)
@@ -18,10 +17,23 @@ class FileService
     }
 
     /**
+     * Generate a UUID
+     *
+     * @return string A UUID v4 string
+     */
+    private function generateUUID()
+    {
+        $data = random_bytes(16);
+        $data[6] = chr((ord($data[6]) & 0x0f) | 0x40); // version 4
+        $data[8] = chr((ord($data[8]) & 0x3f) | 0x80); // variant 10
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
+    /**
      * Upload a file
      *
      * @param array $file The uploaded file ($_FILES['file'])
-     * @return string|false The file path onlsuccess, false on failure
+     * @return string|false The file path on success, false on failure
      */
     public function uploadFile($file)
     {
@@ -37,7 +49,12 @@ class FileService
             return false;
         }
 
-        $fileName = uniqid() . '-' . basename($file['name']);
+        // Get file extension
+        $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
+
+        // Generate a UUID for the filename
+        $uuid = $this->generateUUID();
+        $fileName = $uuid . '.' . $fileExtension;
         $targetPath = $this->uploadDir . $fileName;
 
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {

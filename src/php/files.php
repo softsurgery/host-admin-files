@@ -1,6 +1,7 @@
 <?php
 
-header('Content-Type: application/json');
+require_once "./utils/headers.php";
+
 require_once './services/file.service.php';
 
 $fileService = new FileService();
