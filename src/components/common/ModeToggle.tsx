@@ -8,7 +8,6 @@ interface ModeToggleProps {
 
 export function ModeToggle({ className }: ModeToggleProps) {
   const { theme, setTheme } = useTheme();
-  console.log("theme", theme);
   return (
     <Button
       className={className}

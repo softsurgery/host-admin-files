@@ -21,7 +21,6 @@ import { Toaster } from "@/components/ui/sonner";
 const queryClient = new QueryClient();
 export default function App() {
   const { theme } = useTheme();
-  console.log("theme", theme);
   const router = createBrowserRouter(
     [
       {
