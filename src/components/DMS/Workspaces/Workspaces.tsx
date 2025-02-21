@@ -49,7 +49,7 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
   } = useQuery({
     queryKey: ["workspaces", debouncedSearchTerm],
     queryFn: () =>
-      api.workspace.fetchAll({ search: `search=${debouncedSearchTerm}` })
+      api.workspace.fetchPaginated({ search: `search=${debouncedSearchTerm}` })
   });
 
   const workspaceStore = useWorkspaceStore();

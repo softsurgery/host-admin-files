@@ -1,11 +1,11 @@
 import React from "react";
 
-interface FileActionsContextProps {
+export interface FileActionsContextProps {
   openUploadSheet: () => void;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
   page: number;
-  totalPageCount: 0;
+  totalPageCount: number;
   setPage: (value: number) => void;
   size: number;
   setSize: (value: number) => void;

@@ -20,7 +20,7 @@ export const WorspaceDetails = ({ className }: WorspaceDetailsProps) => {
         desc={workspace?.description || ""}
         className="flex-row"
       />
-      <Files className="mt-4 p-2"/>
+      <Files className="mt-4 p-2" workspaceId={id} />
     </div>
   );
 };

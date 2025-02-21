@@ -1,9 +1,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { BFile } from "@/types/BFile";
+import { UploadFile } from "@/types/UploadFile";
+import { formatBytes } from "@/lib/utils";
 
-export const getFileColumns = (): ColumnDef<BFile>[] => {
+export const getFileColumns = (): ColumnDef<UploadFile>[] => {
   return [
     {
       accessorKey: "Filename",
@@ -45,16 +46,16 @@ export const getFileColumns = (): ColumnDef<BFile>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Size" attribute="size" />
       ),
-      cell: ({ row }) => <div>{row.original.size}</div>,
+      cell: ({ row }) => <div>{formatBytes(row.original.size)}</div>,
       enableSorting: true,
       enableHiding: true,
     },
     {
       accessorKey: "created_at",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Created At" attribute="created_at" />
+        <DataTableColumnHeader column={column} title="Created at" attribute="created_at" />
       ),
-      cell: ({ row }) => <div>{row.original.size}</div>,
+      cell: ({ row }) => <div>{row.original.created_at && new Date(row.original.created_at).toISOString()}</div>,
       enableSorting: true,
       enableHiding: true,
     },

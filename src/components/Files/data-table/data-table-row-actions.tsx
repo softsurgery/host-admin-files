@@ -7,19 +7,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { BFile } from "@/types/BFile";
+import { UploadFile } from "@/types/UploadFile";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import { CopyIcon, Settings2, Telescope, Trash2 } from "lucide-react";
 // import { useFileActions } from "./action-context";
 
 interface DataTableRowActionsProps {
-  row: Row<BFile>;
+  row: Row<UploadFile>;
 }
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const file = row.original;
-  console.log(file)
   // const { openUpdateFileSheet, openDeleteFileDialog, openDuplicateFileDialog } =
   //   useFileActions();
 

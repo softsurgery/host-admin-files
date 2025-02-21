@@ -64,9 +64,7 @@ export function useSheet({
             <SheetTitle>{title}</SheetTitle>
             <SheetDescription>{description}</SheetDescription>
           </SheetHeader>
-          <div className="flex-1 overflow-auto">
-            {children}
-          </div>
+          <div className="flex-1 overflow-auto">{children}</div>
         </SheetContent>
       </Sheet>
     </React.Fragment>,

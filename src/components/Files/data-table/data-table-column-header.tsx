@@ -8,8 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { ArrowDownIcon, ArrowLeftRightIcon, ArrowUpIcon, EyeOff } from "lucide-react";
+import { ArrowDownIcon, ArrowUpIcon, EyeOff } from "lucide-react";
 import { useFileActions } from "./action-context";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
@@ -43,7 +44,7 @@ export function DataTableColumnHeader<TData, TValue>({
             ) : order === false && attribute == sortKey ? (
               <ArrowUpIcon className="ml-2 h-4 w-4" />
             ) : (
-              <ArrowLeftRightIcon className="ml-2 h-4 w-4" />
+              <CaretSortIcon className="ml-2 h-4 w-4" />
             )}
           </Button>
         </DropdownMenuTrigger>
