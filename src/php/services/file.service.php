@@ -1,105 +1,55 @@
 <?php
-
 class FileService
 {
-    private $uploadDir;
-    private $allowedTypes;
-    private $maxSize;
+    private $pdo;
 
-    public function __construct($uploadDir = '../uploads/', $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'], $maxSize = 2097152)
+    public function __construct($pdo)
     {
-        $this->uploadDir = rtrim($uploadDir, '/') . '/';
-        if (!is_dir($this->uploadDir)) {
-            mkdir($this->uploadDir, 0777, true);
-        }
-        $this->allowedTypes = $allowedTypes;
-        $this->maxSize = $maxSize;
+        $this->pdo = $pdo;
     }
 
-    /**
-     * Generate a UUID
-     *
-     * @return string A UUID v4 string
-     */
-    private function generateUUID()
+    public function create(File $file)
     {
-        $data = random_bytes(16);
-        $data[6] = chr((ord($data[6]) & 0x0f) | 0x40); // version 4
-        $data[8] = chr((ord($data[8]) & 0x3f) | 0x80); // variant 10
-        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+        $stmt = $this->pdo->prepare("INSERT INTO files (filename, uuid, size, mime_type, workspace_id) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $file->getFilename(),
+            $file->getUuid(),
+            $file->getSize(),
+            $file->getMimeType(),
+            $file->getWorkspaceId()
+        ]);
+        return $this->pdo->lastInsertId();
     }
 
-    /**
-     * Upload a file
-     *
-     * @param array $file The uploaded file ($_FILES['file'])
-     * @return string|false The file path on success, false on failure
-     */
-    public function uploadFile($file)
+    public function find($id)
     {
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            return false;
-        }
-
-        if (!in_array($file['type'], $this->allowedTypes)) {
-            return false;
-        }
-
-        if ($file['size'] > $this->maxSize) {
-            return false;
-        }
-
-        // Get file extension
-        $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
-
-        // Generate a UUID for the filename
-        $uuid = $this->generateUUID();
-        $fileName = $uuid . '.' . $fileExtension;
-        $targetPath = $this->uploadDir . $fileName;
-
-        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-            return $targetPath;
-        }
-
-        return false;
+        $stmt = $this->pdo->prepare("SELECT * FROM files WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch();
     }
 
-    /**
-     * Read a file's content
-     *
-     * @param string $filePath The path to the file
-     * @return string|false The file content on success, false on failure
-     */
-    public function readFile($filePath)
+    public function findAll()
     {
-        if (file_exists($filePath) && is_readable($filePath)) {
-            return file_get_contents($filePath);
-        }
-        return false;
+        $stmt = $this->pdo->query("SELECT * FROM files");
+        return $stmt->fetchAll();
     }
 
-    /**
-     * Delete a file
-     *
-     * @param string $filePath The path to the file
-     * @return bool True on success, false on failure
-     */
-    public function deleteFile($filePath)
+    public function update(File $file)
     {
-        if (file_exists($filePath) && is_writable($filePath)) {
-            return unlink($filePath);
-        }
-        return false;
+        $stmt = $this->pdo->prepare("UPDATE files SET filename = ?, uuid = ?, size = ?, mime_type = ?, workspace_id = ? WHERE id = ?");
+        $stmt->execute([
+            $file->getFilename(),
+            $file->getUuid(),
+            $file->getSize(),
+            $file->getMimeType(),
+            $file->getWorkspaceId(),
+            $file->getId()
+        ]);
     }
 
-    /**
-     * List all files in the upload directory
-     *
-     * @return array An array of file paths
-     */
-    public function listFiles()
+    public function delete($id)
     {
-        $files = glob($this->uploadDir . '*');
-        return array_map('basename', $files);
+        $stmt = $this->pdo->prepare("DELETE FROM files WHERE id = ?");
+        $stmt->execute([$id]);
     }
 }
