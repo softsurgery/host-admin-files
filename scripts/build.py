@@ -30,7 +30,7 @@ def replace_placeholders(src_file, dest_file):
     # Replace placeholders with actual environment values
     placeholders = [
         "DB_HOST", "DB_NAME", "DB_PORT", "DB_USER", "DB_PASSWORD", "DB_CHARSET",
-        "HTACCESS_ORIGIN", "VITE_APP_URL" ,'JWT_SECRET_KEY'
+        "HTACCESS_ORIGIN", "VITE_APP_URL", 'JWT_SECRET_KEY'
     ]
     for key in placeholders:
         content = content.replace(f"{{{{{key}}}}}", os.getenv(key, f"{{{key}}}"))  # Default to keeping placeholder
@@ -59,14 +59,14 @@ def copy_php_files(src, dest):
             print(f"Copying file {s} -> {d}...")
             shutil.copy(s, d)
 
-def create_uploads_folder():
-    """Create uploads folder in dist if it doesn't exist."""
-    uploads_dir = os.path.join("dist", "uploads")
-    if not os.path.exists(uploads_dir):
-        print("Creating uploads folder...")
-        os.makedirs(uploads_dir, exist_ok=True)
+def grant_permissions(directory):
+    """Grant read/write/execute permissions to the specified directory."""
+    print(f"Granting permissions to directory {directory}...")
+    if os.path.exists(directory):
+        os.chmod(directory, 0o775)
+        print(f"Permissions granted: {directory}")
     else:
-        print("Uploads folder already exists. Skipping creation.")
+        print(f"Directory {directory} does not exist. Skipping permission update.")
 
 def main():
     # Check for environment argument
@@ -81,23 +81,28 @@ def main():
     # Load environment variables
     load_env(env_file)
 
-    # Step 1: Build React Vite project
-    print("Building the React Vite project...")
-    subprocess.run(["yarn", "build"], check=True)
-
     # Define source and destination paths
     php_src = "src/php"
     dist_dir = "dist/php"
     dist_api = os.path.join(dist_dir, "api.php")
     dist_connect = os.path.join(dist_dir, "connect.php")
     dist_jwt_service = os.path.join(dist_dir, "services/jwt.service.php")
+    dist_headers = os.path.join(dist_dir, "utils/headers.php")
     htaccess_src = "src/.htaccess"
     htaccess_dest = "dist/.htaccess"
+    uploads_dir = "dist/uploads"  # Add this for uploads directory
 
-    # Step 2: Copy PHP files (Handles both files and directories)
+    # Step 1: Grant permissions to the uploads directory (avoid permission issues during build)
+    grant_permissions(uploads_dir)
+
+    # Step 2: Build React Vite project (make sure the `uploads` folder is not affected)
+    print("Building the React Vite project...")
+    subprocess.run(["yarn", "build"], check=True)
+
+    # Step 3: Copy PHP files (Handles both files and directories)
     copy_php_files(php_src, dist_dir)
 
-    # Step 3: Copy .htaccess file
+    # Step 4: Copy .htaccess file
     if os.path.isfile(htaccess_src):
         print(f"Copying .htaccess file to '{htaccess_dest}'...")
         os.makedirs("dist", exist_ok=True)
@@ -105,15 +110,14 @@ def main():
     else:
         print(f"Source .htaccess file '{htaccess_src}' does not exist. Skipping copy.")
 
-    # Step 4: Replace placeholders in copied files
+    # Step 5: Replace placeholders in copied files
     replace_placeholders(dist_api, dist_api)
     replace_placeholders(dist_connect, dist_connect)
     replace_placeholders(dist_jwt_service, dist_jwt_service)
+    replace_placeholders(dist_headers, dist_headers)
     replace_placeholders(htaccess_dest, htaccess_dest)
 
     print("Build process complete!")
 
-    # Step 5: Create uploads folder in dist
-    create_uploads_folder()
 if __name__ == "__main__":
     main()
