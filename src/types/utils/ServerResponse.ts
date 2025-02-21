@@ -14,4 +14,5 @@ export interface ServerFileResponse {
 
 export interface ServerApiResponse<T> {
   records: T[];
+  results?: number;
 }

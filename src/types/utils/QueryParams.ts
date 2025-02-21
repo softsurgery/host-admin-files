@@ -4,7 +4,6 @@ export interface QueryParams {
     include?: string;
     exclude?: string;
     order?: string;
-    page?: number;
-    size?: number;
+    page?: string;
     join?: string;
 }
