@@ -31,6 +31,7 @@ interface DataTableProps<TData, TValue> {
   className?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  containerClassName?: string;
   isPending?: boolean;
 }
 
@@ -38,6 +39,7 @@ export function DataTable<TData, TValue>({
   className,
   columns,
   data,
+  containerClassName,
   isPending,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
@@ -69,16 +71,16 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     initialState: {
-        pagination: {
-          pageSize: 20
-        }
-      }
+      pagination: {
+        pageSize: 20,
+      },
+    },
   });
 
   return (
     <div className={cn(className, "space-y-6")}>
       <DataTableToolbar table={table} />
-      <div className="rounded-md border">
+      <div className={cn("rounded-md border", containerClassName)}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
