@@ -1,26 +1,20 @@
 <?php
-
 class UploadService
 {
     private $uploadDir;
     private $allowedTypes;
     private $maxSize;
 
-    public function __construct($uploadDir = '../uploads/', $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'], $maxSize = 2097152)
+    public function __construct($uploadDir = '../uploads/', $allowedTypes = [], $maxSize = 4294967296)
     {
         $this->uploadDir = rtrim($uploadDir, '/') . '/';
         if (!is_dir($this->uploadDir)) {
             mkdir($this->uploadDir, 0777, true);
         }
-        $this->allowedTypes = $allowedTypes;
-        $this->maxSize = $maxSize;
+        $this->allowedTypes = $allowedTypes; // Empty array means no type restriction
+        $this->maxSize = $maxSize; // Max size set to 4GB
     }
 
-    /**
-     * Generate a UUID
-     *
-     * @return string A UUID v4 string
-     */
     private function generateUUID()
     {
         $data = random_bytes(16);
@@ -29,52 +23,58 @@ class UploadService
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 
-    /**
-     * Upload a file
-     *
-     * @param array $file The uploaded file ($_FILES['file'])
-     * @return array|false An array with 'uuid' and 'name' on success, false on failure
-     */
     public function uploadFile($file)
     {
         if ($file['error'] !== UPLOAD_ERR_OK) {
-            return false;
+            return [
+                'status' => 400,
+                'message' => "File upload error: " . $this->getUploadErrorMessage($file['error']),
+                'file' => $file['name']
+            ];
         }
 
-        if (!in_array($file['type'], $this->allowedTypes)) {
-            return false;
-        }
-
+        // Remove the file type restriction check
         if ($file['size'] > $this->maxSize) {
-            return false;
+            return [
+                'status' => 400,
+                'message' => "File exceeds max size of " . ($this->maxSize / (1024 * 1024 * 1024)) . "GB",
+                'file' => $file['name']
+            ];
         }
 
-        // Get file extension
         $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
-
-        // Generate a UUID for the filename
         $uuid = $this->generateUUID();
         $fileName = $uuid . '.' . $fileExtension;
         $targetPath = $this->uploadDir . $fileName;
 
-        if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-            // Return both the UUID and the original file name
+        if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
             return [
-                'uuid' => $uuid,
-                'name' => $file['name']
+                'status' => 400,
+                'message' => "Failed to move uploaded file. Check folder permissions.",
+                'file' => $file['name']
             ];
         }
 
-        return false;
+        return [
+            'uuid' => $uuid,
+            'name' => $file['name']
+        ];
     }
 
+    private function getUploadErrorMessage($errorCode)
+    {
+        $errors = [
+            UPLOAD_ERR_INI_SIZE => "The uploaded file exceeds the upload_max_filesize directive in php.ini.",
+            UPLOAD_ERR_FORM_SIZE => "The uploaded file exceeds the MAX_FILE_SIZE directive in the HTML form.",
+            UPLOAD_ERR_PARTIAL => "The uploaded file was only partially uploaded.",
+            UPLOAD_ERR_NO_FILE => "No file was uploaded.",
+            UPLOAD_ERR_NO_TMP_DIR => "Missing a temporary folder.",
+            UPLOAD_ERR_CANT_WRITE => "Failed to write file to disk.",
+            UPLOAD_ERR_EXTENSION => "A PHP extension stopped the file upload."
+        ];
+        return $errors[$errorCode] ?? "Unknown error.";
+    }
 
-    /**
-     * Read a file's content
-     *
-     * @param string $filePath The path to the file
-     * @return string|false The file content on success, false on failure
-     */
     public function readFile($filePath)
     {
         if (file_exists($filePath) && is_readable($filePath)) {
@@ -83,12 +83,6 @@ class UploadService
         return false;
     }
 
-    /**
-     * Delete a file
-     *
-     * @param string $filePath The path to the file
-     * @return bool True on success, false on failure
-     */
     public function deleteFile($filePath)
     {
         if (file_exists($filePath) && is_writable($filePath)) {
@@ -97,11 +91,6 @@ class UploadService
         return false;
     }
 
-    /**
-     * List all files in the upload directory
-     *
-     * @return array An array of file paths
-     */
     public function listFiles()
     {
         $files = glob($this->uploadDir . '*');

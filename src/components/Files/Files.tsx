@@ -12,12 +12,11 @@ import { useFileUploadSheet } from "./modals/FileUploadSheet";
 import { useFileUploaderStore } from "@/hooks/stores/useFileUploaderStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { CreateUploadFileDto } from "@/types/UploadFile";
 import { useDebounce } from "@/hooks/useDebounce";
 
 interface FilePanelProps {
   className?: string;
-  workspaceId: number;
+  workspaceId?: string;
 }
 
 export default function FilePanel({ className, workspaceId }: FilePanelProps) {
@@ -67,6 +66,7 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
       debouncedSize,
       debouncedSortDetails,
       debouncedSearchTerm,
+      workspaceId,
     ],
     queryFn: async () =>
       api.file.fetchPaginated({
@@ -75,6 +75,7 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
           sortDetails.order ? "desc" : "asc"
         }`,
         search: `search=${debouncedSearchTerm}`,
+        filter: `filter=workspace_id,eq,${workspaceId}`,
       }),
   });
 
@@ -82,39 +83,20 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
     return filesResp?.records || [];
   }, [filesResp]);
 
-  const { mutate: createManyFiles } = useMutation({
-    mutationFn: async (files: CreateUploadFileDto[]) =>
-      api.file.create(files[0]),
-    onSuccess: () => {
-      closeUploadFileSheet();
-      fileUploaderStore.reset();
-      toast.success("Files uploaded successfully");
-    },
-    onError: (error) => {
-      toast.error(JSON.stringify(error));
-    },
-  });
+  const totalPageCount = React.useMemo(() => {
+    return Math.ceil((filesResp?.results ?? 0) / size);
+  }, [filesResp]);
 
   const { mutate: uploadFilesMutator, isPending: isUploadPending } =
     useMutation({
       mutationFn: async () => {
-        createManyFiles(
-          fileUploaderStore.files.map((file) => {
-            return {
-              filename: file.name,
-              uuid: "",
-              size: file.size,
-              mime_type: file.type,
-              workspace_id: workspaceId,
-            };
-          })
-        );
+        await api.upload.uploadMany(fileUploaderStore.files, workspaceId || "");
       },
       onSuccess: () => {
-        refetchFiles();
         closeUploadFileSheet();
         fileUploaderStore.reset();
         toast.success("Files uploaded successfully");
+        refetchFiles();
       },
       onError: (error) => {
         toast.error(JSON.stringify(error));
@@ -144,7 +126,7 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
     setPage,
     size,
     setSize,
-    totalPageCount: Math.ceil((filesResp?.results ?? 0) / size),
+    totalPageCount,
     sortKey: sortDetails.sortKey,
     order: sortDetails.order,
     setSortDetails: (order: boolean, sortKey: string) =>
@@ -165,6 +147,8 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
         )}
       >
         <DataTable
+          className="flex flex-col flex-1 overflow-hidden p-1"
+          containerClassName="overflow-auto"
           columns={getFileColumns()}
           data={files}
           isPending={isPending}
