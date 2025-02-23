@@ -2,10 +2,9 @@ import { cn, formatBytes } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Download, X, Upload } from "lucide-react";
 import { useFileUploaderStore } from "@/hooks/stores/useFileUploaderStore";
-import { downloadFile } from "@/lib/download-file.util";
+import { downloadFile } from "@/lib/file.util";
 import { useRef } from "react";
 import { FilePreview } from "../common/FilePreview";
-import { ScrollArea } from "../ui/scroll-area";
 
 interface FileFormProps {
   className?: string;
