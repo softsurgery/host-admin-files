@@ -3,6 +3,7 @@ import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { UploadFile } from "@/types/UploadFile";
 import { formatBytes } from "@/lib/utils";
+import { formatDateToLocal } from "@/lib/date.utils";
 
 export const getFileColumns = (): ColumnDef<UploadFile>[] => {
   return [
@@ -55,7 +56,7 @@ export const getFileColumns = (): ColumnDef<UploadFile>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Created at" attribute="created_at" />
       ),
-      cell: ({ row }) => <div>{row.original.created_at && new Date(row.original.created_at).toISOString()}</div>,
+      cell: ({ row }) => <div>{row.original.created_at && formatDateToLocal(row.original.created_at)}</div>,
       enableSorting: true,
       enableHiding: true,
     },
