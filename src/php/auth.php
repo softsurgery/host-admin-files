@@ -18,13 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     $result = $authService->register($username, $email, $password);
 
     if ($result === "Registration successful!") {
-        http_response_code(201); // Created
+        http_response_code(201);
         echo json_encode([
             'status' => 201,
             'message' => 'User registered successfully'
         ]);
     } else {
-        http_response_code(400); // Bad Request
+        http_response_code(400);
         echo json_encode([
             'status' => 400,
             'message' => $result
@@ -41,14 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $token = $authService->login($usernameOrEmail, $password);
 
     if ($token) {
-        http_response_code(200); // OK
+        http_response_code(200);
         echo json_encode([
             'status' => 200,
             'message' => 'Login successful',
-            'token' => $token // Return JWT token
+            'token' => $token
         ]);
     } else {
-        http_response_code(401); // Unauthorized
+        http_response_code(401);
         echo json_encode([
             'status' => 401,
             'message' => 'Invalid username or password'
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 }
 
 // Invalid Request
-http_response_code(405); // Method Not Allowed
+http_response_code(405);
 echo json_encode([
     'status' => 405,
     'message' => 'Invalid request'

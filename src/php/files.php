@@ -9,7 +9,24 @@ require_once 'connect.php';
 $fileService = new FileService($pdo);
 $uploadService = new UploadService();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['uuid']) && isset($_GET['ext'])) {
+    try {
+        $filePath = $uploadService->downloadFile($_GET['uuid'], $_GET['ext']);
+
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+        header('Content-Length: ' . filesize($filePath));
+
+        readfile($filePath);
+
+        exit;
+    } catch (Exception $e) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ]);
+    }
+} else if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])) {
     $uploadedFiles = $_FILES['files'];
     $uploadResults = [];
 

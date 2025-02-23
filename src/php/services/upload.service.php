@@ -11,8 +11,8 @@ class UploadService
         if (!is_dir($this->uploadDir)) {
             mkdir($this->uploadDir, 0777, true);
         }
-        $this->allowedTypes = $allowedTypes; // Empty array means no type restriction
-        $this->maxSize = $maxSize; // Max size set to 4GB
+        $this->allowedTypes = $allowedTypes;
+        $this->maxSize = $maxSize;
     }
 
     private function generateUUID()
@@ -95,5 +95,16 @@ class UploadService
     {
         $files = glob($this->uploadDir . '*');
         return array_map('basename', $files);
+    }
+
+    public function downloadFile($uuid, $extension = null)
+    {
+        $fileExtension = $extension ?: 'pdf';
+        $filePath = $this->uploadDir . $uuid . '.' . $fileExtension;
+        if (!file_exists($filePath)) {
+            throw new Exception("File not found.");
+        }
+
+        return $filePath;
     }
 }

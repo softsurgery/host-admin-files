@@ -7,11 +7,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { downloadFileFromUrl } from "@/lib/file.util";
 import { UploadFile } from "@/types/UploadFile";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-import { Download, Trash2 } from "lucide-react";
-// import { useFileActions } from "./action-context";
+import { Download, Trash } from "lucide-react";
 
 interface DataTableRowActionsProps {
   row: Row<UploadFile>;
@@ -19,15 +19,8 @@ interface DataTableRowActionsProps {
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const file = row.original;
-  // const { openUpdateFileSheet, openDeleteFileDialog, openDuplicateFileDialog } =
-  //   useFileActions();
-
-  // const fileManager = useFileManager();
-
-  // const targetFile = () => {
-  //   fileManager.setRole(role);
-  // };
-
+  const ext = file?.filename?.split(".").pop()?.trim().toLowerCase() || "";
+  const url = `${import.meta.env.VITE_BASE_URL}/files.php?uuid=${file?.uuid}&ext=${ext}`;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,14 +31,16 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           <DotsHorizontalIcon className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="center" className="w-[160px]">
-        <DropdownMenuLabel className="text-center">Actions </DropdownMenuLabel>
+      <DropdownMenuContent align="center" side="bottom">
+        <DropdownMenuLabel>Actions </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {}}>
-          <Download className="h-5 w-5 mr-2" /> Download
+        <DropdownMenuItem onClick={() => {
+          downloadFileFromUrl(url);
+        }}>
+          <Download /> Download
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => {}}>
-          <Trash2 className="h-5 w-5 mr-2" /> Delete
+        <DropdownMenuItem className="text-red-500" onClick={() => {}}>
+          <Trash /> Delete
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
