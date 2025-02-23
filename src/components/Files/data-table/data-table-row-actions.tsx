@@ -10,7 +10,7 @@ import {
 import { UploadFile } from "@/types/UploadFile";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
-import { CopyIcon, Settings2, Telescope, Trash2 } from "lucide-react";
+import { Download, Trash2 } from "lucide-react";
 // import { useFileActions } from "./action-context";
 
 interface DataTableRowActionsProps {
@@ -42,31 +42,9 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         <DropdownMenuLabel className="text-center">Actions </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => {}}>
-          <Telescope className="h-5 w-5 mr-2" /> Inspect
+          <Download className="h-5 w-5 mr-2" /> Download
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            // targetFile();
-            // openUpdateFileSheet();
-          }}
-        >
-          <Settings2 className="h-5 w-5 mr-2" /> Update
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => {
-            // targetFile();
-            // openDuplicateFileDialog();
-          }}
-        >
-          <CopyIcon className="h-5 w-5 mr-2" /> Duplicate
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => {
-            // targetFile();
-            // openDeleteFileDialog();
-          }}
-        >
+        <DropdownMenuItem onClick={() => {}}>
           <Trash2 className="h-5 w-5 mr-2" /> Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

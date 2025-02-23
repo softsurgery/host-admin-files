@@ -2,8 +2,7 @@ import { File } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSheet } from "@/components/common/Sheet";
 import { Spinner } from "@/components/common/Spinner";
-import { FileUploader } from "@/components/ui/file-uploader";
-import { useFileUploaderStore } from "@/hooks/stores/useFileUploaderStore";
+import { FileForm } from "../FileForm";
 
 interface FileUploadSheetProps {
   uploadFiles?: () => void;
@@ -16,7 +15,6 @@ export const useFileUploadSheet = ({
   isUploadPending,
   resetFile,
 }: FileUploadSheetProps) => {
-  const fileUploaderStore = useFileUploaderStore();
   const {
     SheetFragment: uploadFileSheet,
     openSheet: openUploadFileSheet,
@@ -30,22 +28,15 @@ export const useFileUploadSheet = ({
     ),
     description: "Use this form to define a new file within the system",
     children: (
-      <div className="flex flex-col h-full">
-        <FileUploader
-          className="flex-1 my-5"
-          maxFileCount={Infinity}
-          value={fileUploaderStore.files}
-          onValueChange={(files) => {
-            fileUploaderStore.setFiles(files);
-          }}
-        />
+      <div className="flex flex-col flex-1 overflow-hidden h-full">
+        <FileForm className="flex flex-col flex-1 overflow-hidden my-4"/>
         <div className="flex gap-2 my-4 justify-end">
           <Button
             onClick={() => {
               uploadFiles?.();
             }}
           >
-            Save
+            Upload
             <Spinner show={isUploadPending} />
           </Button>
           <Button
@@ -59,7 +50,7 @@ export const useFileUploadSheet = ({
         </div>
       </div>
     ),
-    className: "min-w-[70vw]",
+    className: "min-w-[30vw]",
     onToggle: resetFile,
   });
 
