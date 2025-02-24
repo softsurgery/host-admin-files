@@ -1,20 +1,25 @@
 import { cn } from "@/lib/utils";
-import SidebarNav from "../common/SidebarNav";
-import { KeySquare, Orbit, Settings2 } from "lucide-react";
-import { Separator } from "../ui/separator";
+import SidebarNav from "../components/common/SidebarNav";
+import { FileTextIcon, KeySquare, Orbit, Settings2 } from "lucide-react";
+import { Separator } from "../components/ui/separator";
 import { Outlet } from "react-router-dom";
 
-interface DMSMainProps {
+interface DocumentManagementProps {
   className?: string;
 }
 
-export default function DMSMain({ className }: DMSMainProps) {
+export default function DocumentManagement({ className }: DocumentManagementProps) {
   //menu items
   const sidebarNavItems = [
     {
       title: "Workspaces",
       icon: <Orbit size={18} />,
       href: "/dms/workspaces",
+    },
+    {
+      title: "Files",
+      icon: <FileTextIcon size={18} />,
+      href: "/dms/files",
     },
     {
       title: "API Keys",

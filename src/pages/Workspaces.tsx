@@ -1,12 +1,12 @@
 import { cn } from "@/lib/utils";
-import { WorkspaceEntry } from "./WorkspaceEntry";
+import { WorkspaceEntry } from "../components/DMS/Workspaces/WorkspaceEntry";
 import React from "react";
 import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import ContentSection from "../../common/ContentSection";
+import ContentSection from "../components/common/ContentSection";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useWorkspaceCreateSheet } from "./modals/WorkspaceCreateSheet";
+import { useWorkspaceCreateSheet } from "../components/DMS/Workspaces/modals/WorkspaceCreateSheet";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { Workspace } from "@/types/Workspace";
@@ -15,8 +15,8 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { ServerResponse } from "@/types/utils/ServerResponse";
 import { workspaceSchema } from "@/types/validations/Workspace";
-import { useWorkspaceDeleteDialog } from "./modals/WorkspaceDeleteDialog";
-import { useWorkspaceUpdateSheet } from "./modals/WorkspaceUpdateSheet";
+import { useWorkspaceDeleteDialog } from "../components/DMS/Workspaces/modals/WorkspaceDeleteDialog";
+import { useWorkspaceUpdateSheet } from "../components/DMS/Workspaces/modals/WorkspaceUpdateSheet";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Label } from "@/components/ui/label";
 
@@ -28,7 +28,10 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
   //set page title in the breadcrumb
   const { setRoutes } = useBreadcrumb();
   React.useEffect(() => {
-    setRoutes?.([{ title: "DMS" }, { title: "Workspaces" }]);
+    setRoutes?.([
+      { title: "DMS", href: "/dms/workspaces" },
+      { title: "Workspaces", href: "/dms/workspaces" },
+    ]);
   }, []);
 
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -49,7 +52,7 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
   } = useQuery({
     queryKey: ["workspaces", debouncedSearchTerm],
     queryFn: () =>
-      api.workspace.fetchPaginated({ search: `search=${debouncedSearchTerm}` })
+      api.workspace.fetchPaginated({ search: `search=${debouncedSearchTerm}` }),
   });
 
   const workspaceStore = useWorkspaceStore();
@@ -157,8 +160,8 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
   return (
     <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
       <ContentSection
-        title="Workspace Control"
-        desc="Control your workspaces"
+        title="Workspace Management"
+        desc="Manage and organize your workspaces efficiently. Create, update, and delete workspaces while seamlessly navigating through your workspace list."
         className="flex-row"
       >
         <div className="flex flex-row gap-2 ">
@@ -176,7 +179,7 @@ export const Workspaces = ({ className }: WorkspacesProps) => {
         </div>
       </ContentSection>
 
-      <div className="flex flex-col flex-1overflow-auto gap-4 mt-5 mx-2">
+      <div className="flex flex-col flex-1 overflow-auto gap-4 mt-5 mx-2">
         <div className="flex flex-col gap-4 items-center justify-center">
           {isPending ? (
             <div className="flex flex-row gap-4 items-center justify-center">

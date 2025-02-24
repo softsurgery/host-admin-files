@@ -3,7 +3,6 @@ import {
   FlaskConical,
   LifeBuoy,
   LucideProps,
-  Paperclip,
   SquareUser,
   Triangle,
 } from "lucide-react";
@@ -49,11 +48,10 @@ export default function Layout({ className }: LayoutProps) {
     setRoutes,
   };
 
-  const version = "0.0.1-beta";
+  const version = "0.0.2-beta";
 
   const aItems: MenuItem[] = [
-    { id: 1, label: "D.M.S", href: "/dms", icon: Paperclip },
-    { id: 2, label: "Files", href: "/files", icon: File },
+    { id: 1, label: "Document Management", href: "/dms", icon: File },
     { id: 3, label: "Test", href: "/test", icon: FlaskConical },
   ];
   const bItems: MenuItem[] = [
@@ -118,7 +116,7 @@ export default function Layout({ className }: LayoutProps) {
             <main className="flex flex-col flex-1 overflow-hidden gap-4">
               <Outlet />
             </main>
-            <p className="text-xs border ml-auto p-0.5 w-fit">{version}</p>
+            <p className="text-xs ml-auto font-bold w-fit">v.{version}</p>
           </div>
         </div>
       </div>

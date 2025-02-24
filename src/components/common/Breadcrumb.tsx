@@ -42,7 +42,7 @@ export const BreadcrumbCommon = ({
                 {item.title}
               </BreadcrumbLink>
             ) : (
-              <BreadcrumbPage className="font-medium text-xs sm:text-sm md:text-base">
+              <BreadcrumbPage className="font-medium text-xs">
                 {item.title}
               </BreadcrumbPage>
             )}

@@ -66,7 +66,7 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
           sortDetails.order ? "desc" : "asc"
         }`,
         search: `search=${debouncedSearchTerm}`,
-        filter: `filter=workspace_id,eq,${workspaceId}`,
+        filter: workspaceId ? `filter=workspace_id,eq,${workspaceId}` : "",
       }),
   });
 
@@ -124,13 +124,12 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
       resetFile: () => fileUploaderStore.reset(),
     });
 
-  const { deleteFileDialog, openDeleteFileDialog } =
-    useFileDeleteDialog({
-      fileLabel: fileUploaderStore.uuid,
-      deleteFile,
-      isDeletionPending,
-      resetFile: () => fileUploaderStore.reset(),
-    });
+  const { deleteFileDialog, openDeleteFileDialog } = useFileDeleteDialog({
+    fileLabel: fileUploaderStore.uuid,
+    deleteFile,
+    isDeletionPending,
+    resetFile: () => fileUploaderStore.reset(),
+  });
 
   const context: Partial<FileActionsContextProps> = {
     openUploadSheet: openUploadFileSheet,
