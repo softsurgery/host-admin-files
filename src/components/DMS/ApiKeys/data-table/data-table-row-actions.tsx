@@ -12,6 +12,7 @@ import { Row } from "@tanstack/react-table";
 import { Edit, Trash } from "lucide-react";
 import { useApiKeyActions } from "./action-context";
 import { ApiKey } from "@/types/APIKey";
+import { useAPIKeyStore } from "@/hooks/stores/useAPIKeyStore";
 
 interface DataTableRowActionsProps {
   row: Row<ApiKey>;
@@ -19,7 +20,8 @@ interface DataTableRowActionsProps {
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const key = row.original;
-  const {} = useApiKeyActions();
+  const { openDeleteAPIKeyDialog } = useApiKeyActions();
+  const apiKeyStore = useAPIKeyStore();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,7 +38,14 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         <DropdownMenuItem>
           <Edit /> Edit
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-red-500">
+        <DropdownMenuItem
+          className="text-red-500"
+          onClick={() => {
+            apiKeyStore.set("id", key.id);
+            apiKeyStore.set("name", key.name);
+            openDeleteAPIKeyDialog?.();
+          }}
+        >
           <Trash /> Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -2,38 +2,38 @@ import { useDialog } from "@/components/common/Dialog";
 import { Spinner } from "@/components/common/Spinner";
 import { Button } from "@/components/ui/button";
 
-interface FileDeleteDialogProps {
-  fileLabel?: string;
-  deleteFile?: () => void;
+interface APIKeyDeleteDialogProps {
+  apiKeyLabel?: string;
+  deleteAPIKey?: () => void;
   isDeletionPending?: boolean;
-  resetFile?: () => void;
+  resetAPIKey?: () => void;
 }
 
-export const useFileDeleteDialog = ({
-  fileLabel,
-  deleteFile,
+export const useAPIKeyDeleteDialog = ({
+  apiKeyLabel,
+  deleteAPIKey,
   isDeletionPending,
-  resetFile
-}: FileDeleteDialogProps) => {
+  resetAPIKey,
+}: APIKeyDeleteDialogProps) => {
   const {
-    DialogFragment: deleteFileDialog,
-    openDialog: openDeleteFileDialog,
-    closeDialog: closeDeleteFileDialog,
+    DialogFragment: deleteAPIKeyDialog,
+    openDialog: openDeleteAPIKeyDialog,
+    closeDialog: closeDeleteAPIKeyDialog,
   } = useDialog({
     title: (
       <div className="leading-normal">
-        Delete File <span className="font-light">{fileLabel}</span> ?
+        Delete API Key <span className="font-light">{apiKeyLabel}</span> ?
       </div>
     ),
     description:
-      "This action is permanent and cannot be undone. All associations with this file will also be removed.",
+      "This action is permanent and cannot be undone. All associations with this apiKey will also be removed.",
     children: (
       <div>
         <div className="flex gap-2 justify-end">
           <Button
             onClick={() => {
-              deleteFile?.();
-              closeDeleteFileDialog();
+              deleteAPIKey?.();
+              closeDeleteAPIKeyDialog();
             }}
           >
             Confirm
@@ -42,8 +42,8 @@ export const useFileDeleteDialog = ({
           <Button
             variant={"secondary"}
             onClick={() => {
-              resetFile?.();
-              closeDeleteFileDialog();
+              resetAPIKey?.();
+              closeDeleteAPIKeyDialog();
             }}
           >
             Cancel
@@ -52,12 +52,12 @@ export const useFileDeleteDialog = ({
       </div>
     ),
     className: "w-[500px]",
-    onToggle: resetFile,
+    onToggle: resetAPIKey,
   });
 
   return {
-    deleteFileDialog,
-    openDeleteFileDialog,
-    closeDeleteFileDialog,
+    deleteAPIKeyDialog,
+    openDeleteAPIKeyDialog,
+    closeDeleteAPIKeyDialog,
   };
 };

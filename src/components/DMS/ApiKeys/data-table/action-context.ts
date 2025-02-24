@@ -2,7 +2,7 @@ import React from "react";
 
 export interface ApiKeyActionsContextProps {
   openCreateAPIKeySheet: () => void;
-  openDeleteFileDialog: () => void;
+  openDeleteAPIKeyDialog: () => void;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
   page: number;
@@ -19,7 +19,7 @@ export const ApiKeyActionsContext = React.createContext<
   Partial<ApiKeyActionsContextProps>
 >({
   openCreateAPIKeySheet: () => {},
-  openDeleteFileDialog: () => {},
+  openDeleteAPIKeyDialog: () => {},
   searchTerm: "",
   setSearchTerm: (_value: string) => {},
   page: 1,

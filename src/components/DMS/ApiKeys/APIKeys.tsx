@@ -15,6 +15,7 @@ import { useAPIKeyStore } from "@/hooks/stores/useAPIKeyStore";
 import { AxiosError } from "axios";
 import { ServerResponse } from "@/types/utils/ServerResponse";
 import { apiKeySchema } from "@/types/validations/APIKey";
+import { useAPIKeyDeleteDialog } from "./modals/APIKeyDeleteDialog";
 
 interface APIKeyPanelProps {
   className?: string;
@@ -34,7 +35,7 @@ export default function APIKeyPanel({ className }: APIKeyPanelProps) {
   );
 
   const [sortDetails, setSortDetails] = React.useState({
-    order: true,
+    order: false,
     sortKey: "id",
   });
   const { value: debouncedSortDetails, loading: sorting } = useDebounce<
@@ -91,12 +92,13 @@ export default function APIKeyPanel({ className }: APIKeyPanelProps) {
     },
   });
 
-  const { mutate: deleteFile, isPending: isDeletionPending } = useMutation({
+  const { mutate: deleteAPIKey, isPending: isDeletionPending } = useMutation({
     mutationFn: async () => {
       await api.apiKey.remove(apiKeyStore.id);
     },
     onSuccess: () => {
-      toast.success("File deleted successfully");
+      toast.success("API Key deleted successfully");
+      closeDeleteAPIKeyDialog();
       refetchApiKeys();
     },
     onError: (error) => {
@@ -122,8 +124,20 @@ export default function APIKeyPanel({ className }: APIKeyPanelProps) {
       resetAPIKey: () => apiKeyStore.reset(),
     });
 
+  const {
+    deleteAPIKeyDialog,
+    openDeleteAPIKeyDialog,
+    closeDeleteAPIKeyDialog,
+  } = useAPIKeyDeleteDialog({
+    apiKeyLabel: apiKeyStore.name,
+    deleteAPIKey: deleteAPIKey,
+    isDeletionPending,
+    resetAPIKey: () => apiKeyStore.reset(),
+  });
+
   const context: Partial<ApiKeyActionsContextProps> = {
     openCreateAPIKeySheet,
+    openDeleteAPIKeyDialog,
     page,
     setPage,
     size,
@@ -157,6 +171,7 @@ export default function APIKeyPanel({ className }: APIKeyPanelProps) {
         />
       </div>
       {createAPIKeySheet}
+      {deleteAPIKeyDialog}
     </ApiKeyActionsContext.Provider>
   );
 }

@@ -36,11 +36,17 @@ export const APIKeyForm = ({ className }: APIKeyFormProps) => {
           className={cn("mt-1", apiKeyStore?.errors?.name && "border-red-500")}
           placeholder="Ex. X API Key"
           value={apiKeyStore?.name}
-          onChange={(e) => apiKeyStore.set("name", e.target.value)}
+          onChange={(e) => {
+            apiKeyStore.set("name", e.target.value);
+            apiKeyStore.set("errors", {
+              ...apiKeyStore.errors,
+              name: undefined,
+            });
+          }}
         />
         {apiKeyStore?.errors?.name && (
           <span className="text-xs font-bold text-red-500 m-1">
-            {apiKeyStore?.errors?.name}
+            {apiKeyStore?.errors?.name?.[0]}
           </span>
         )}
         <p className="text-xs font-thin mt-2">
@@ -55,25 +61,29 @@ export const APIKeyForm = ({ className }: APIKeyFormProps) => {
         </Label>
         <div className="flex flex-row gap-2">
           <Input
-            disabled
             type="text"
             id="key"
             className={cn("mt-1", apiKeyStore?.errors?.key && "border-red-500")}
             placeholder={`Ex. ${generateApiKey()}`}
             name="key"
             value={apiKeyStore?.key}
-            onChange={(e) => apiKeyStore.set("key", e.target.value)}
           />
           <Button
             variant={"outline"}
-            onClick={() => apiKeyStore.set("key", generateApiKey())}
+            onClick={() => {
+              apiKeyStore.set("key", generateApiKey());
+              apiKeyStore.set("errors", {
+                ...apiKeyStore.errors,
+                key: undefined,
+              });
+            }}
           >
             Generate
           </Button>
         </div>
         {apiKeyStore?.errors?.key && (
           <span className="text-xs font-bold text-red-500 m-1">
-            {apiKeyStore?.errors?.key}
+            {apiKeyStore?.errors?.key?.[0]}
           </span>
         )}
         <p className="text-xs font-thin mt-2">
@@ -89,7 +99,13 @@ export const APIKeyForm = ({ className }: APIKeyFormProps) => {
         <Select
           name="workspace"
           key={apiKeyStore?.workspace_id?.toString() || "currencyId"}
-          onValueChange={(e) => apiKeyStore.set("workspace_id", parseInt(e))}
+          onValueChange={(e) => {
+            apiKeyStore.set("workspace_id", parseInt(e));
+            apiKeyStore.set("errors", {
+              ...apiKeyStore.errors,
+              workspace_id: undefined,
+            });
+          }}
           value={apiKeyStore?.workspace_id?.toString() || undefined}
         >
           <SelectTrigger
@@ -110,7 +126,7 @@ export const APIKeyForm = ({ className }: APIKeyFormProps) => {
         </Select>
         {apiKeyStore?.errors?.workspace_id && (
           <span className="text-xs font-bold text-red-500 m-1">
-            {apiKeyStore?.errors?.workspace_id}
+            {apiKeyStore?.errors?.workspace_id?.[0]}
           </span>
         )}
         <p className="text-xs font-thin mt-2">
