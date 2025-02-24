@@ -4,7 +4,7 @@ import { Download, X, Upload } from "lucide-react";
 import { useFileUploaderStore } from "@/hooks/stores/useFileUploaderStore";
 import { downloadFile } from "@/lib/file.util";
 import { useRef } from "react";
-import { FilePreview } from "../common/FilePreview";
+import { FilePreview } from "../../common/FilePreview";
 
 interface FileFormProps {
   className?: string;

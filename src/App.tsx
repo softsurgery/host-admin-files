@@ -1,5 +1,5 @@
 import React from "react";
-import Files from "./components/Files/Files";
+import Files from "./components/DMS/Files/Files";
 import Layout from "./components/layout/Layout";
 import {
   createBrowserRouter,

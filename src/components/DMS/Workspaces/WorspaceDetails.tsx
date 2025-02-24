@@ -1,6 +1,6 @@
 import ContentSection from "@/components/common/ContentSection";
 import { Spinner } from "@/components/common/Spinner";
-import Files from "@/components/Files/Files";
+import Files from "@/components/DMS/Files/Files";
 import useWorkspace from "@/hooks/content/useWorkspace";
 import { cn } from "@/lib/utils";
 import { useParams } from "react-router-dom";

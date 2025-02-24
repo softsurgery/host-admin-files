@@ -1,6 +1,5 @@
 import React from "react";
 import { DataTable } from "./data-table/data-table";
-import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import { api } from "@/api";
 import { getFileColumns } from "./data-table/columns";
 import { cn } from "@/lib/utils";
@@ -21,15 +20,6 @@ interface FilePanelProps {
 }
 
 export default function FilePanel({ className, workspaceId }: FilePanelProps) {
-  const { setRoutes } = useBreadcrumb();
-
-  React.useEffect(() => {
-    setRoutes?.([
-      { href: "/", title: "Home" },
-      { href: "/files", title: "Files" },
-    ]);
-  }, []);
-
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
