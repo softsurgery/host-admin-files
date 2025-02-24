@@ -4,11 +4,11 @@ import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import ContentSection from "@/components/common/ContentSection";
 import FilePanel from "@/components/DMS/Files/Files";
 
-interface FilesMainProps {
+interface FilesPageProps {
   className?: string;
 }
 
-export const FilesMain = ({ className }: FilesMainProps) => {
+export const FilesPage = ({ className }: FilesPageProps) => {
   //set page title in the breadcrumb
   const { setRoutes } = useBreadcrumb();
   React.useEffect(() => {
@@ -26,7 +26,7 @@ export const FilesMain = ({ className }: FilesMainProps) => {
         className="flex-row"
       ></ContentSection>
 
-      <div className="flex flex-col flex-1overflow-auto gap-4 mt-5 mx-2">
+      <div className="flex flex-col flex-1 overflow-auto gap-4 mt-5 mx-2">
         <FilePanel />
       </div>
     </div>

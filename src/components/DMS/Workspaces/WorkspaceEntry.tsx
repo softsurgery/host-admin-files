@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { formatDateToLocal } from "@/lib/date.utils";
 
 interface WorkspaceEntryProps {
   className?: string;
@@ -49,7 +50,12 @@ export const WorkspaceEntry = ({
             <span className="font-thin">No Description Provided</span>
           )}
         </Label>
-        <Label className="text-xs"> Created At : {workspace?.created_at}</Label>
+        <Label className="text-xs">
+          Created on{" "}
+          {workspace?.created_at
+            ? formatDateToLocal(workspace?.created_at)
+            : ""}
+        </Label>
       </div>
       <div className="flex flex-row gap-2">
         <Button

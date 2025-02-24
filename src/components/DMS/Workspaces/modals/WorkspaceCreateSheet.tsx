@@ -29,7 +29,7 @@ export const useWorkspaceCreateSheet = ({
     description: "Use this form to define a new workspace within the system",
     children: (
       <div>
-        <WorkspaceForm className="mt-4" />
+        <WorkspaceForm className="my-5" />
         <div className="flex gap-2 justify-end my-4">
           <Button
             onClick={() => {

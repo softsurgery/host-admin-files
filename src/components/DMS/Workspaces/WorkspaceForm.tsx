@@ -11,7 +11,7 @@ interface WorkspaceFormProps {
 export const WorkspaceForm = ({ className }: WorkspaceFormProps) => {
   const workspaceStore = useWorkspaceStore();
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
+    <div className={cn("flex flex-col gap-4 px-1", className)}>
       <div>
         <Label htmlFor="name" required>
           Workspace Name
