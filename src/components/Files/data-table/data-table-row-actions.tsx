@@ -1,3 +1,4 @@
+import { api } from "@/api";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -7,11 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { downloadFileFromUrl } from "@/lib/file.util";
 import { UploadFile } from "@/types/UploadFile";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Row } from "@tanstack/react-table";
 import { Download, Trash } from "lucide-react";
+import { useFileActions } from "./action-context";
+import { useFileUploaderStore } from "@/hooks/stores/useFileUploaderStore";
 
 interface DataTableRowActionsProps {
   row: Row<UploadFile>;
@@ -20,7 +22,8 @@ interface DataTableRowActionsProps {
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const file = row.original;
   const ext = file?.filename?.split(".").pop()?.trim().toLowerCase() || "";
-  const url = `${import.meta.env.VITE_BASE_URL}/files.php?uuid=${file?.uuid}&ext=${ext}`;
+  const fileUploaderStore = useFileUploaderStore();
+  const { openDeleteFileDialog } = useFileActions();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -34,12 +37,20 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
       <DropdownMenuContent align="center" side="bottom">
         <DropdownMenuLabel>Actions </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {
-          downloadFileFromUrl(url);
-        }}>
+        <DropdownMenuItem
+          onClick={() => {
+            api.upload.downloadFile(file?.uuid, ext);
+          }}
+        >
           <Download /> Download
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-red-500" onClick={() => {}}>
+        <DropdownMenuItem
+          className="text-red-500"
+          onClick={() => {
+            fileUploaderStore.set("uuid", file?.uuid);
+            openDeleteFileDialog?.();
+          }}
+        >
           <Trash /> Delete
         </DropdownMenuItem>
       </DropdownMenuContent>

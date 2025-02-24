@@ -12857,37 +12857,15 @@ namespace Tqdev\PhpCrudApi {
 
 // file: src/index.php
 namespace Tqdev\PhpCrudApi {
-    require_once "./utils/headers.php";
-
-    require_once "./services/jwt.service.php";
 
     use Tqdev\PhpCrudApi\Api;
     use Tqdev\PhpCrudApi\Config\Config;
     use Tqdev\PhpCrudApi\RequestFactory;
     use Tqdev\PhpCrudApi\ResponseUtils;
-    use JWTService;
 
-    $jwtService = new JWTService();
-
-    $authHeader = $_SERVER['HTTP_X_AUTHORIZATION'] ?? '';
-    if (!$authHeader || strpos($authHeader, 'Bearer ') !== 0) {
-        http_response_code(401);
-        echo json_encode([
-            'status' => '401',
-            'message' => 'Missing or invalid Authorization header'
-        ]);
-        exit();
-    }
-    $jwt = substr($authHeader, 7);
-    $tokenValidation = $jwtService->validateToken($jwt);
-    if (!$tokenValidation) {
-        http_response_code(401);
-        echo json_encode([
-            'status' => '401',
-            'message' => 'Invalid or expired token'
-        ]);
-        exit();
-    }
+    require './autoload.php';
+    require $BASE_URL . '/utils/headers.php';
+    require $BASE_URL . '/utils/disconnect.php';
 
     $config = new Config([
         'driver' => 'mysql',

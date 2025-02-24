@@ -13,6 +13,7 @@ import { useFileUploaderStore } from "@/hooks/stores/useFileUploaderStore";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useFileDeleteDialog } from "./modals/FileDeleteDialog";
 
 interface FilePanelProps {
   className?: string;
@@ -103,6 +104,19 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
       },
     });
 
+  const { mutate: deleteFile, isPending: isDeletionPending } = useMutation({
+    mutationFn: async () => {
+      await api.upload.deleteFile(fileUploaderStore.uuid);
+    },
+    onSuccess: () => {
+      toast.success("File deleted successfully");
+      refetchFiles();
+    },
+    onError: (error) => {
+      toast.error(JSON.stringify(error));
+    },
+  });
+
   const uploadFiles = async () => {
     if (fileUploaderStore.files.length === 0) {
       toast.error("You have not selected any files to upload", {
@@ -120,8 +134,17 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
       resetFile: () => fileUploaderStore.reset(),
     });
 
+  const { deleteFileDialog, openDeleteFileDialog } =
+    useFileDeleteDialog({
+      fileLabel: fileUploaderStore.uuid,
+      deleteFile,
+      isDeletionPending,
+      resetFile: () => fileUploaderStore.reset(),
+    });
+
   const context: Partial<FileActionsContextProps> = {
     openUploadSheet: openUploadFileSheet,
+    openDeleteFileDialog,
     page,
     setPage,
     size,
@@ -154,6 +177,7 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
           isPending={isPending}
         />
       </div>
+      {deleteFileDialog}
       {uploadFileSheet}
     </FileActionsContext.Provider>
   );

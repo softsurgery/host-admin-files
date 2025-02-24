@@ -1,6 +1,7 @@
 import React from "react";
 
 export interface FileActionsContextProps {
+  openDeleteFileDialog: () => void;
   openUploadSheet: () => void;
   searchTerm: string;
   setSearchTerm: (value: string) => void;
@@ -17,6 +18,7 @@ export interface FileActionsContextProps {
 export const FileActionsContext = React.createContext<
   Partial<FileActionsContextProps>
 >({
+  openDeleteFileDialog: () => {},
   openUploadSheet: () => {},
   searchTerm: "",
   setSearchTerm: (_value: string) => {},

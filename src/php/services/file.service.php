@@ -28,6 +28,13 @@ class FileService
         return $stmt->fetch();
     }
 
+    public function findByUUID($uuid)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM files WHERE uuid = ?");
+        $stmt->execute([$uuid]);
+        return $stmt->fetch();
+    }
+
     public function findAll()
     {
         $stmt = $this->pdo->query("SELECT * FROM files");
@@ -51,5 +58,11 @@ class FileService
     {
         $stmt = $this->pdo->prepare("DELETE FROM files WHERE id = ?");
         $stmt->execute([$id]);
+    }
+
+    public function deleteByUUID($uuid)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM files WHERE uuid = ?");
+        $stmt->execute([$uuid]);
     }
 }

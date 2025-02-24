@@ -1,10 +1,8 @@
 <?php
 
-require_once "./utils/headers.php";
-require_once './services/upload.service.php';
-require_once './services/file.service.php';
-require_once './models/file.model.php';
-require_once 'connect.php';
+require './autoload.php';
+require $BASE_URL . '/utils/headers.php';
+require $BASE_URL . '/utils/disconnect.php';
 
 $fileService = new FileService($pdo);
 $uploadService = new UploadService();
@@ -95,6 +93,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['uuid']) && isset($_GET[
         'status' => 200,
         'results' => $uploadResults
     ]);
+} else if ($_SERVER['REQUEST_METHOD'] === 'DELETE' && isset($_GET['uuid'])) {
+    $uuid = $_GET['uuid'];
+
+    $file = $fileService->findByUUID($uuid);
+    if (!$file) {
+        echo json_encode([
+            'status' => 404,
+            'message' => "File not found."
+        ]);
+        exit;
+    }
+    $filePath = $uploadService->downloadFile($file['uuid'], pathinfo($file['filename'], PATHINFO_EXTENSION));
+
+    if ($uploadService->deleteFile($filePath)) {
+        $fileService->deleteByUUID($uuid);
+
+        echo json_encode([
+            'status' => 200,
+            'message' => "File deleted successfully.",
+            'uuid' => $uuid
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 400,
+            'message' => "Failed to delete the file."
+        ]);
+    }
 } else {
     http_response_code(400);
     echo json_encode([
