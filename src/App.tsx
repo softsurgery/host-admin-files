@@ -9,7 +9,6 @@ import { ThemeProvider, useTheme } from "./components/ui/theme-provider";
 import DocumentManagement from "./pages/DocumentManagement";
 import Page404 from "./components/common/Page404";
 import ComingSoon from "./components/common/ComingSoon";
-import { Workspaces } from "./pages/Workspaces";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Auth from "./pages/Auth";
 import { DisconnectComponent } from "./components/auth/DisconnectComponent";
@@ -17,7 +16,8 @@ import { useAuthPersistStore } from "./hooks/stores/useAuthPersistStore";
 import { WorspaceDetails } from "./components/DMS/Workspaces/WorspaceDetails";
 import { Toaster } from "@/components/ui/sonner";
 import { FilesPage } from "./pages/FilesPage";
-import { ApiKeysPage } from "./pages/ApiKeys";
+import { ApiKeysPage } from "./pages/ApiKeyPage";
+import { WorkspacePage } from "./pages/WorkspacePage";
 
 const queryClient = new QueryClient();
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
             element: <DocumentManagement />,
             children: [
               { path: "/dms", element: <Navigate to="/dms/workspaces" /> },
-              { path: "/dms/workspaces", element: <Workspaces /> },
+              { path: "/dms/workspaces", element: <WorkspacePage /> },
               { path: "/dms/workspaces/:id", element: <WorspaceDetails /> },
               { path: "/dms/files", element: <FilesPage /> },
               { path: "/dms/api-keys", element: <ApiKeysPage /> },

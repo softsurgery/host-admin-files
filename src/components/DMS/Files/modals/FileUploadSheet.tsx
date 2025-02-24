@@ -50,7 +50,7 @@ export const useFileUploadSheet = ({
         </div>
       </div>
     ),
-    className: "min-w-[30vw]",
+    className: "min-w-[25vw]",
     onToggle: resetFile,
   });
 

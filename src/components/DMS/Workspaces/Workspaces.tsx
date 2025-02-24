@@ -1,12 +1,8 @@
 import { cn } from "@/lib/utils";
-import { WorkspaceEntry } from "../components/DMS/Workspaces/WorkspaceEntry";
 import React from "react";
-import { useBreadcrumb } from "@/context/BreadcrumbContext";
-import ContentSection from "../components/common/ContentSection";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useWorkspaceCreateSheet } from "../components/DMS/Workspaces/modals/WorkspaceCreateSheet";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 import { Workspace } from "@/types/Workspace";
@@ -15,25 +11,20 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { ServerResponse } from "@/types/utils/ServerResponse";
 import { workspaceSchema } from "@/types/validations/Workspace";
-import { useWorkspaceDeleteDialog } from "../components/DMS/Workspaces/modals/WorkspaceDeleteDialog";
-import { useWorkspaceUpdateSheet } from "../components/DMS/Workspaces/modals/WorkspaceUpdateSheet";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Label } from "@/components/ui/label";
+import { useWorkspaceCreateSheet } from "./modals/WorkspaceCreateSheet";
+import { useWorkspaceUpdateSheet } from "./modals/WorkspaceUpdateSheet";
+import { useWorkspaceDeleteDialog } from "./modals/WorkspaceDeleteDialog";
+import ContentSection from "@/components/common/ContentSection";
+import { WorkspaceEntry } from "./WorkspaceEntry";
 
 interface WorkspacesProps {
   className?: string;
 }
 
 export const Workspaces = ({ className }: WorkspacesProps) => {
-  //set page title in the breadcrumb
-  const { setRoutes } = useBreadcrumb();
-  React.useEffect(() => {
-    setRoutes?.([
-      { title: "DMS", href: "/dms/workspaces" },
-      { title: "Workspaces", href: "/dms/workspaces" },
-    ]);
-  }, []);
-
+ 
   const [searchTerm, setSearchTerm] = React.useState("");
   const { value: debouncedSearchTerm, loading: searching } =
     useDebounce<string>(searchTerm, 500);
