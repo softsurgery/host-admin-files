@@ -32,6 +32,21 @@ export const WorspaceDetails = ({ className }: WorspaceDetailsProps) => {
     }
   }, [id, workspace]);
 
+  const elements = [
+    {
+      id: "files",
+      label: "Files",
+      icon: <File />,
+      component: <Files className="mt-4 p-2" workspaceId={id} />,
+    },
+    {
+      id: "apiKeys",
+      label: "API Keys",
+      icon: <KeyRound />,
+      component: <APIKeyPanel className="mt-4 p-2" workspaceId={id} />,
+    },
+  ];
+
   if (isWorkspacePending) return <Spinner className="w-full h-full" />;
   return (
     <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
@@ -40,23 +55,20 @@ export const WorspaceDetails = ({ className }: WorspaceDetailsProps) => {
         desc={workspace?.description || ""}
         className="flex-row"
       />
-      <Tabs defaultValue="files" className="mt-5">
-        <TabsList>
-          <TabsTrigger value="files" className="flex items-center gap-2">
-            <File />
-            Files
-          </TabsTrigger>
-          <TabsTrigger value="apiKeys" className="flex items-center gap-2">
-            <KeyRound />
-            API Keys
-          </TabsTrigger>
+      <Tabs defaultValue={elements[0].id} className="flex flex-col overflow-hidden mt-5">
+        <TabsList className="w-fit">
+          {elements.map(({ id, label, icon }) => (
+            <TabsTrigger key={id} value={id} className="flex items-center gap-2">
+              {icon}
+              {label}
+            </TabsTrigger>
+          ))}
         </TabsList>
-        <TabsContent value="files">
-          <Files className="mt-4 p-2" workspaceId={id} />
-        </TabsContent>
-        <TabsContent value="apiKeys">
-          <APIKeyPanel className="mt-4 p-2" workspaceId={id} />
-        </TabsContent>
+        {elements.map(({ id, component }) => (
+          <TabsContent key={id} value={id} className="flex flex-col overflow-hidden">
+            {component}
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   );
