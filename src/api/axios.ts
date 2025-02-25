@@ -21,7 +21,11 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      error.response.data.message === "Invalid or expired token"
+    ) {
       useAuthPersistStore.getState().setToken("");
       useAuthPersistStore.getState().setAuthenticated(false);
       window.location.href = "/";
