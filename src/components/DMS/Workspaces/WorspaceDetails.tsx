@@ -6,6 +6,9 @@ import { useBreadcrumb } from "@/context/BreadcrumbContext";
 import useWorkspace from "@/hooks/content/useWorkspace";
 import { cn } from "@/lib/utils";
 import { useParams } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import APIKeyPanel from "../ApiKeys/APIKeys";
+import { File, KeyRound } from "lucide-react";
 
 interface WorspaceDetailsProps {
   className?: string;
@@ -37,7 +40,24 @@ export const WorspaceDetails = ({ className }: WorspaceDetailsProps) => {
         desc={workspace?.description || ""}
         className="flex-row"
       />
-      <Files className="mt-4 p-2" workspaceId={id} />
+      <Tabs defaultValue="files" className="mt-5">
+        <TabsList>
+          <TabsTrigger value="files" className="flex items-center gap-2">
+            <File />
+            Files
+          </TabsTrigger>
+          <TabsTrigger value="apiKeys" className="flex items-center gap-2">
+            <KeyRound />
+            API Keys
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="files">
+          <Files className="mt-4 p-2" workspaceId={id} />
+        </TabsContent>
+        <TabsContent value="apiKeys">
+          <APIKeyPanel className="mt-4 p-2" workspaceId={id} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

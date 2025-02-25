@@ -19,9 +19,13 @@ import { useAPIKeyDeleteDialog } from "./modals/APIKeyDeleteDialog";
 
 interface APIKeyPanelProps {
   className?: string;
+  workspaceId?: string;
 }
 
-export default function APIKeyPanel({ className }: APIKeyPanelProps) {
+export default function APIKeyPanel({
+  className,
+  workspaceId,
+}: APIKeyPanelProps) {
   const [page, setPage] = React.useState(1);
   const { value: debouncedPage, loading: paging } = useDebounce<number>(
     page,
@@ -67,6 +71,7 @@ export default function APIKeyPanel({ className }: APIKeyPanelProps) {
           sortDetails.order ? "desc" : "asc"
         }`,
         search: `search=${debouncedSearchTerm}`,
+        filter: workspaceId ? `filter=workspace_id,eq,${workspaceId}` : "",
         join: `join=workspaces`,
       }),
   });

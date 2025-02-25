@@ -20,7 +20,7 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between gap-2">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter Files..."
+          placeholder="Filter API Keys..."
           value={searchTerm?.toString()}
           onChange={(event) => {
             setPage?.(1);
