@@ -13,6 +13,7 @@ import useWorkspaces from "@/hooks/content/useWorkspaces";
 import { useAPIKeyStore } from "@/hooks/stores/useAPIKeyStore";
 import { generateApiKey } from "@/lib/key.utils";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 interface APIKeyFormProps {
   className?: string;
@@ -21,6 +22,9 @@ interface APIKeyFormProps {
 export const APIKeyForm = ({ className }: APIKeyFormProps) => {
   const apiKeyStore = useAPIKeyStore();
   const { workspaces, isWorkspacesPending } = useWorkspaces();
+  const keyPlaceholder = React.useMemo(() => {
+    return `Ex. ${generateApiKey()}`;
+  },[]);
   if (isWorkspacesPending) return <Spinner className="w-full h-full" />;
   return (
     <div className={cn("flex flex-col gap-4 px-1", className)}>
@@ -64,7 +68,7 @@ export const APIKeyForm = ({ className }: APIKeyFormProps) => {
             type="text"
             id="key"
             className={cn("mt-1", apiKeyStore?.errors?.key && "border-red-500")}
-            placeholder={`Ex. ${generateApiKey()}`}
+            placeholder={keyPlaceholder}
             name="key"
             value={apiKeyStore?.key}
           />
