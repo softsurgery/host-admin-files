@@ -5,9 +5,11 @@ $BASE_URL = __DIR__;
 
 //connect
 require_once $BASE_URL . "/connect.php";
+require_once $BASE_URL . "/utils/json-response.php";
 
 //models
 require_once $BASE_URL . "/models/file.model.php";
+require_once $BASE_URL . "/models/api-key.model.php";
 
 //services
 require_once $BASE_URL . "/services/jwt.service.php";
@@ -21,5 +23,12 @@ $fileService = new FileService($pdo);
 
 require_once $BASE_URL . "/services/upload.service.php";
 $uploadService = new UploadService();
+
+require_once $BASE_URL . "/services/api-key.service.php";
+$apiKeyService = new ApiKeyService($pdo);
+
+//controller
+require_once $BASE_URL . "/controllers/auth.controller.php";
+$authController = new AuthController($authService);
 
 
