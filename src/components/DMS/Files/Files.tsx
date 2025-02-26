@@ -13,6 +13,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useFileDeleteDialog } from "./modals/FileDeleteDialog";
+import { ServerResponse } from "@/types/utils/ServerResponse";
 
 interface FilePanelProps {
   className?: string;
@@ -96,10 +97,10 @@ export default function FilePanel({ className, workspaceId }: FilePanelProps) {
 
   const { mutate: deleteFile, isPending: isDeletionPending } = useMutation({
     mutationFn: async () => {
-      await api.upload.deleteFile(fileUploaderStore.uuid);
+      return api.upload.deleteFile(fileUploaderStore.uuid);
     },
-    onSuccess: () => {
-      toast.success("File deleted successfully");
+    onSuccess: (data: ServerResponse) => {
+      toast.success(data.message);
       refetchFiles();
     },
     onError: (error) => {

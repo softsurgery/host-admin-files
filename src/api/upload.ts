@@ -1,5 +1,5 @@
 import axios from "./axios";
-import { ServerFileResponse } from "@/types/utils/ServerResponse";
+import { ServerFileResponse, ServerResponse } from "@/types/utils/ServerResponse";
 
 const downloadFile = async (uuid: string, ext: string) => {
   try {
@@ -53,14 +53,14 @@ const uploadMany = async (
   return response.data;
 };
 
-const deleteFile = async (uuid: string) => {
-    const response = await axios.delete(`/files.php?uuid=${uuid}`);
-    return response.data;
+const deleteFile = async (uuid: string): Promise<ServerResponse> => {
+  const response = await axios.delete<ServerResponse>(`/files.php?uuid=${uuid}`);
+  return response.data;
 };
 
 export const upload = {
   downloadFile,
   uploadOne,
   uploadMany,
-  deleteFile
+  deleteFile,
 };
