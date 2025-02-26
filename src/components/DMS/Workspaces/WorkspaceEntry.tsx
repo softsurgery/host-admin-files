@@ -67,7 +67,7 @@ export const WorkspaceEntry = ({
           Inspect
         </Button>
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="w-5 h-5 p-4">
               <EllipsisIcon />
             </Button>
