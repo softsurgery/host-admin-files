@@ -31,4 +31,7 @@ $apiKeyService = new ApiKeyService($pdo);
 require_once $BASE_URL . "/controllers/auth.controller.php";
 $authController = new AuthController($authService);
 
+require_once $BASE_URL . "/controllers/file.controller.php";
+$fileController = new FileController($fileService, $uploadService);
+
 

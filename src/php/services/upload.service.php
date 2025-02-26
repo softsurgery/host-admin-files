@@ -102,7 +102,7 @@ class UploadService
         $fileExtension = $extension ?: 'pdf';
         $filePath = $this->uploadDir . $uuid . '.' . $fileExtension;
         if (!file_exists($filePath)) {
-            throw new Exception("File not found.");
+            return null;
         }
 
         return $filePath;
