@@ -12,7 +12,19 @@ const fetchPaginated = async (
         .join("&")
     : "";
   const response = await axios.get(`/api.php/records/api_keys?${queryString}`);
-  return response.data;
+  const isWorkspaceJoined = params?.join?.includes("workspaces");
+  return {
+    ...response.data,
+    records: response.data.records.map(
+      (record: Record<keyof ApiKey, unknown>) => ({
+        ...record,
+        workspace: isWorkspaceJoined ? record.workspace_id : undefined,
+        workspace_id: isWorkspaceJoined
+          ? (record.workspace_id as { id: number }).id
+          : record.workspace_id,
+      })
+    ),
+  };
 };
 
 const create = async (key: Partial<ApiKey>): Promise<number> => {

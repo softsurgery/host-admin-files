@@ -1,5 +1,9 @@
 import axios from "./axios";
-import { ServerFileResponse, ServerResponse } from "@/types/utils/ServerResponse";
+import axiosForTest from "axios";
+import {
+  ServerFileResponse,
+  ServerResponse,
+} from "@/types/utils/ServerResponse";
 
 const downloadFile = async (uuid: string, ext: string) => {
   try {
@@ -11,6 +15,33 @@ const downloadFile = async (uuid: string, ext: string) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     a.href = url;
     a.download = `${uuid}.${ext}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error downloading the file:", error);
+  }
+};
+
+const downloadFileByURL = async (
+  filename: string,
+  furl: string,
+  apiKey: string
+) => {
+  try {
+    const response = await axiosForTest.get(furl, {
+      responseType: "blob",
+      headers: {
+        "X-API-KEY": apiKey,
+      },
+    });
+
+    const a = document.createElement("a");
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    a.href = url;
+    a.download = `${filename}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -54,12 +85,15 @@ const uploadMany = async (
 };
 
 const deleteFile = async (uuid: string): Promise<ServerResponse> => {
-  const response = await axios.delete<ServerResponse>(`/files.php?uuid=${uuid}`);
+  const response = await axios.delete<ServerResponse>(
+    `/files.php?uuid=${uuid}`
+  );
   return response.data;
 };
 
 export const upload = {
   downloadFile,
+  downloadFileByURL,
   uploadOne,
   uploadMany,
   deleteFile,
