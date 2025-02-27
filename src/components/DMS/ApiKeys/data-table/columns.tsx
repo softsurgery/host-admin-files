@@ -43,11 +43,7 @@ export const getFileColumns = (): ColumnDef<ApiKey>[] => {
         />
       ),
       cell: ({ row }) => (
-        <div>
-          {typeof row.original.workspace_id != "number"
-            ? row.original.workspace_id?.name
-            : "No Workspace"}
-        </div>
+        <div>{row.original.workspace?.name || "No Workspace"}</div>
       ),
       enableSorting: true,
       enableHiding: true,
