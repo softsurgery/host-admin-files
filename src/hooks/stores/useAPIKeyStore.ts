@@ -1,4 +1,5 @@
 import { ApiKey } from "@/types/APIKey";
+import { Workspace } from "@/types/Workspace";
 import { create } from "zustand";
 
 interface APIKeyData {
@@ -40,7 +41,7 @@ export const useAPIKeyStore = create<APIKeyStore>((set, get) => ({
       workspace_id:
         typeof apiKey.workspace_id == "number"
           ? apiKey.workspace_id
-          : apiKey.workspace_id?.id,
+          : (apiKey.workspace_id as Workspace)?.id,
     });
   },
   get: () => {

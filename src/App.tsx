@@ -18,6 +18,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { FilesPage } from "./pages/FilesPage";
 import { ApiKeysPage } from "./pages/ApiKeyPage";
 import { WorkspacePage } from "./pages/WorkspacePage";
+import { PlaygroundPage } from "./pages/PlaygroundPage";
 
 const queryClient = new QueryClient();
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
               { path: "/dms/workspaces/:id", element: <WorspaceDetails /> },
               { path: "/dms/files", element: <FilesPage /> },
               { path: "/dms/api-keys", element: <ApiKeysPage /> },
+              { path: "/dms/playground", element: <PlaygroundPage /> },
               { path: "/dms/preferences", element: <ComingSoon /> },
             ],
           },

@@ -1,6 +1,12 @@
 import { cn } from "@/lib/utils";
 import SidebarNav from "../components/common/SidebarNav";
-import { FileTextIcon, KeySquare, Orbit, Settings2 } from "lucide-react";
+import {
+  FileTextIcon,
+  Gamepad,
+  KeySquare,
+  Orbit,
+  Settings2,
+} from "lucide-react";
 import { Separator } from "../components/ui/separator";
 import { Outlet } from "react-router-dom";
 
@@ -8,7 +14,9 @@ interface DocumentManagementProps {
   className?: string;
 }
 
-export default function DocumentManagement({ className }: DocumentManagementProps) {
+export default function DocumentManagement({
+  className,
+}: DocumentManagementProps) {
   //menu items
   const sidebarNavItems = [
     {
@@ -25,6 +33,11 @@ export default function DocumentManagement({ className }: DocumentManagementProp
       title: "API Keys",
       icon: <KeySquare size={18} />,
       href: "/dms/api-keys",
+    },
+    {
+      title: "Playground",
+      icon: <Gamepad size={18} />,
+      href: "/dms/playground",
     },
     {
       title: "Preferences",
