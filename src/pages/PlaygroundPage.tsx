@@ -22,7 +22,7 @@ export const PlaygroundPage = ({ className }: PlaygroundPageProps) => {
     <div className={cn("flex flex-col flex-1 overflow-hidden", className)}>
       <ContentSection
         title="Playground"
-        desc=""
+        desc="The Playground is an interactive interface that allows users to execute various file gateway actions within a selected workspace."
         className="flex-row"
       ></ContentSection>
 

@@ -8,8 +8,8 @@ import { Button } from "./button";
 export interface CodeBlockProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   language?: string;
-  readOnly?: boolean; 
-  onRun?: ()=>void;
+  readOnly?: boolean;
+  onRun?: () => void;
 }
 
 const CodeBlock = React.forwardRef<HTMLTextAreaElement, CodeBlockProps>(
@@ -27,8 +27,7 @@ const CodeBlock = React.forwardRef<HTMLTextAreaElement, CodeBlockProps>(
     };
 
     return (
-      <div className="border px-2 pt-2">
-        
+      <div className="border rounded-lg px-2 pt-2">
         <div
           className={cn(
             "relative flex min-h-[80px] w-full border-input px-3 py-2 text-sm rounded-sm",
@@ -51,17 +50,24 @@ const CodeBlock = React.forwardRef<HTMLTextAreaElement, CodeBlockProps>(
           />
         </div>
         <div className="flex justify-end">
-        <Button variant={"ghost"} size={"icon"} onClick={handleCopy} className="m-1">
-          {copied ? (
-            <Check size={16} />
-          ) : (
-            <Clipboard size={16} />
-          )}
-        </Button>
-        <Button variant={"ghost"} size={"icon"} onClick={props.onRun} className="m-1">
-         <Play/>
-        </Button>
-        </div> 
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={handleCopy}
+            className="m-1"
+          >
+            {copied ? <Check size={16} /> : <Clipboard size={16} />}
+          </Button>
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={props.onRun}
+            disabled={!props.onRun}
+            className="m-1"
+          >
+            <Play />
+          </Button>
+        </div>
       </div>
     );
   }

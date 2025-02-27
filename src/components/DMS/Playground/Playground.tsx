@@ -12,8 +12,24 @@ interface PlaygroundProps {
 export const Playground = ({ className }: PlaygroundProps) => {
   const playgroundStore = usePlaygroundStore();
 
+  const canRun = React.useMemo(() => {
+    return (
+      playgroundStore.workspaceId &&
+      playgroundStore.fileId &&
+      playgroundStore.apiKeyId
+    );
+  }, [
+    playgroundStore.workspaceId,
+    playgroundStore.fileId,
+    playgroundStore.apiKeyId,
+  ]);
+
   const furl = React.useMemo(() => {
-    return `${window.location.protocol}//${window.location.hostname}/php/file-gateway.php?uuid=${playgroundStore.uuid}&ext=${playgroundStore.fileExtension}`;
+    return `${window.location.protocol}//${
+      window.location.hostname
+    }/php/file-gateway.php?uuid=${playgroundStore.uuid || ""}&ext=${
+      playgroundStore.fileExtension || ""
+    }`;
   }, [playgroundStore.uuid, playgroundStore.fileExtension]);
 
   return (
@@ -23,12 +39,15 @@ export const Playground = ({ className }: PlaygroundProps) => {
         <CodeBlock
           value={furl}
           language="url"
-          onRun={() =>
-            api.upload.downloadFileByURL(
-              playgroundStore?.filename || "download",
-              furl,
-              playgroundStore.apiKey
-            )
+          onRun={
+            canRun
+              ? () =>
+                  api.upload.downloadFileByURL(
+                    playgroundStore?.filename || "download",
+                    furl,
+                    playgroundStore.apiKey
+                  )
+              : undefined
           }
         />
       </div>
