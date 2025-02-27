@@ -9,6 +9,7 @@ if (!$authHeader || strpos($authHeader, 'Bearer ') !== 0) {
     ]);
     exit();
 }
+
 $jwt = substr($authHeader, 7);
 $tokenValidation = $jwtService->validateToken($jwt);
 if (!$tokenValidation) {

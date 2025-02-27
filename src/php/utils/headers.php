@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, X-Authorization");
+header("Access-Control-Allow-Headers: Content-Type, X-Authorization, X-API-KEY");
 header('Content-Type: application/json');
 
 // Handle Preflight

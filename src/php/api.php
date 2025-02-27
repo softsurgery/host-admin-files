@@ -12865,7 +12865,7 @@ namespace Tqdev\PhpCrudApi {
 
     require './autoload.php';
     require $BASE_URL . '/utils/headers.php';
-    require $BASE_URL . '/utils/disconnect.php';
+    require $BASE_URL . '/utils/authorize.php';
 
     $config = new Config([
         'driver' => 'mysql',

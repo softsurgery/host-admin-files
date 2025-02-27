@@ -18,6 +18,7 @@ $jwtService = new JWTService();
 require_once $BASE_URL . "/services/auth.service.php";
 $authService = new AuthService($pdo, $jwtService);
 
+
 require_once $BASE_URL . "/services/file.service.php";
 $fileService = new FileService($pdo);
 
@@ -26,6 +27,9 @@ $uploadService = new UploadService();
 
 require_once $BASE_URL . "/services/api-key.service.php";
 $apiKeyService = new ApiKeyService($pdo);
+
+require_once $BASE_URL . "/services/api-key-auth.service.php";
+$apiKeyAuthService = new ApiKeyAuth($apiKeyService);
 
 //controller
 require_once $BASE_URL . "/controllers/auth.controller.php";
