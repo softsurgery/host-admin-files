@@ -61,7 +61,7 @@ class FileController
             return;
         }
 
-        if ($file['workspace_id'] !== $workspaceId) {
+        if ($file['workspace_id'] != $workspaceId) {
             $this->respondWithError(403, "Access forbidden: File does not belong to the workspace.");
             return;
         }
@@ -171,7 +171,7 @@ class FileController
             return;
         }
 
-        if ($file['workspace_id'] !== $workspaceId) {
+        if ($file['workspace_id'] != $workspaceId) {
             $this->respondWithError(403, "Access forbidden: File does not belong to the workspace.");
             return;
         }
