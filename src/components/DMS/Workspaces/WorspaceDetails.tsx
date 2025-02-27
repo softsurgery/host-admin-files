@@ -37,13 +37,13 @@ export const WorspaceDetails = ({ className }: WorspaceDetailsProps) => {
       id: "files",
       label: "Files",
       icon: <File />,
-      component: <Files className="mt-4 p-2" workspaceId={id} />,
+      component: <Files className="mt-5" workspaceId={id} />,
     },
     {
       id: "apiKeys",
       label: "API Keys",
       icon: <KeyRound />,
-      component: <APIKeyPanel className="mt-4 p-2" workspaceId={id} />,
+      component: <APIKeyPanel className="mt-5" workspaceId={id} />,
     },
   ];
 
@@ -53,7 +53,6 @@ export const WorspaceDetails = ({ className }: WorspaceDetailsProps) => {
       <ContentSection
         title={`${workspace?.name}'s Workspace`}
         desc={workspace?.description || ""}
-        className="flex-row"
       />
       <Tabs defaultValue={elements[0].id} className="flex flex-col overflow-hidden mt-5">
         <TabsList className="w-fit">
@@ -65,7 +64,7 @@ export const WorspaceDetails = ({ className }: WorspaceDetailsProps) => {
           ))}
         </TabsList>
         {elements.map(({ id, component }) => (
-          <TabsContent key={id} value={id} className="flex flex-col overflow-hidden">
+          <TabsContent key={id} value={id} className="flex flex-col overflow-hidden mt-0">
             {component}
           </TabsContent>
         ))}
