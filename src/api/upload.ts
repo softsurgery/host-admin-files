@@ -28,7 +28,7 @@ const downloadFile = async (uuid: string, ext: string) => {
 const downloadFileByURL = async (
   filename: string,
   furl: string,
-  apiKey: string
+  apiKey?: string
 ) => {
   try {
     const response = await axiosForTest.get(furl, {

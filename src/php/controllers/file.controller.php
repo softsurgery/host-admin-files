@@ -26,10 +26,24 @@ class FileController
         try {
             $filePath = $this->uploadService->downloadFile($uuid, $ext);
             if ($filePath !== null && file_exists($filePath)) {
-                header('Content-Type: application/octet-stream');
-                header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
-                header('Content-Length: ' . filesize($filePath));
-                readfile($filePath);
+                if (ob_get_length())
+                    ob_end_clean(); // Clear output buffer
+
+                header("Content-Type: application/octet-stream");
+                header("Content-Disposition: attachment; filename=\"" . basename($filePath) . "\"");
+                header("Content-Length: " . filesize($filePath));
+                header("Cache-Control: no-cache, must-revalidate");
+                header("Expires: 0");
+
+                // Read file in chunks
+                $handle = fopen($filePath, "rb");
+                if ($handle) {
+                    while (!feof($handle)) {
+                        echo fread($handle, 8192);
+                        flush();
+                    }
+                    fclose($handle);
+                }
                 exit;
             }
         } catch (Exception $e) {
@@ -55,10 +69,24 @@ class FileController
         try {
             $filePath = $this->uploadService->downloadFile($uuid, $ext);
             if ($filePath !== null && file_exists($filePath)) {
-                header('Content-Type: application/octet-stream');
-                header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
-                header('Content-Length: ' . filesize($filePath));
-                readfile($filePath);
+                if (ob_get_length())
+                    ob_end_clean(); // Clear output buffer
+
+                header("Content-Type: application/octet-stream");
+                header("Content-Disposition: attachment; filename=\"" . basename($filePath) . "\"");
+                header("Content-Length: " . filesize($filePath));
+                header("Cache-Control: no-cache, must-revalidate");
+                header("Expires: 0");
+
+                // Read file in chunks
+                $handle = fopen($filePath, "rb");
+                if ($handle) {
+                    while (!feof($handle)) {
+                        echo fread($handle, 8192);
+                        flush();
+                    }
+                    fclose($handle);
+                }
                 exit;
             }
         } catch (Exception $e) {
