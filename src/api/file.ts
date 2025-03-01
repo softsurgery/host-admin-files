@@ -12,7 +12,19 @@ const fetchPaginated = async (
         .join("&")
     : "";
   const response = await axios.get(`/api.php/records/files?${queryString}`);
-  return response.data;
+  const isWorkspaceJoined = params?.join?.includes("workspaces");
+  return {
+    ...response.data,
+    records: response.data.records.map(
+      (record: Record<keyof UploadFile, unknown>) => ({
+        ...record,
+        workspace: isWorkspaceJoined ? record.workspace_id : undefined,
+        workspace_id: isWorkspaceJoined
+          ? (record.workspace_id as { id: number }).id
+          : record.workspace_id,
+      })
+    ),
+  };
 };
 
 const create = async (file: CreateUploadFileDto) => {
