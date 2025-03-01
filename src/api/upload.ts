@@ -52,6 +52,15 @@ const downloadFileByURL = async (
   }
 };
 
+const deleteFileByURL = async (furl: string, apiKey?: string) => {
+  const response = await axiosForTest.delete(furl, {
+    headers: {
+      "X-API-KEY": apiKey,
+    },
+  });
+  return response.data;
+};
+
 const uploadOne = async (
   file: File,
   workspaceId: string
@@ -97,4 +106,5 @@ export const upload = {
   uploadOne,
   uploadMany,
   deleteFile,
+  deleteFileByURL
 };

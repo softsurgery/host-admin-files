@@ -16,9 +16,13 @@ import { FILE_GATEWAY_ACTIONS } from "@/constants/file-gateway-actions";
 
 interface PlaygroundFormProps {
   className?: string;
+  isPending?: boolean;
 }
 
-export const PlaygroundForm = ({ className }: PlaygroundFormProps) => {
+export const PlaygroundForm = ({
+  className,
+  isPending,
+}: PlaygroundFormProps) => {
   const playgroundStore = usePlaygroundStore();
 
   // Fetch workspaces
@@ -112,7 +116,9 @@ export const PlaygroundForm = ({ className }: PlaygroundFormProps) => {
             key={playgroundStore.workspaceId?.toString() || "workspace"}
             onValueChange={handleWorkspaceChange}
             value={playgroundStore.workspaceId?.toString()}
-            disabled={!playgroundStore.actionId || workspaces.length === 0}
+            disabled={
+              !playgroundStore.actionId || workspaces.length === 0 || isPending
+            }
           >
             <SelectTrigger className="mt-2">
               <SelectValue
@@ -148,7 +154,9 @@ export const PlaygroundForm = ({ className }: PlaygroundFormProps) => {
             key={playgroundStore.apiKeyId?.toString() || "api-key"}
             onValueChange={handleApiKeyValueChange}
             value={playgroundStore.apiKeyId?.toString()}
-            disabled={!playgroundStore.workspaceId || apiKeys.length === 0}
+            disabled={
+              !playgroundStore.workspaceId || apiKeys.length === 0 || isPending
+            }
           >
             <SelectTrigger className="mt-2">
               <SelectValue
@@ -185,7 +193,9 @@ export const PlaygroundForm = ({ className }: PlaygroundFormProps) => {
             key={playgroundStore.fileId?.toString() || "file"}
             onValueChange={handleFileValueChange}
             value={playgroundStore.fileId?.toString()}
-            disabled={!playgroundStore.apiKeyId || files.length === 0}
+            disabled={
+              !playgroundStore.apiKeyId || files.length === 0 || isPending
+            }
           >
             <SelectTrigger className="mt-2">
               <SelectValue
